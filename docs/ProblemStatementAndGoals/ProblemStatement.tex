@@ -3,11 +3,11 @@
 \usepackage{tabularx}
 \usepackage{booktabs}
 
-\title{Problem Statement and Goals\\\progname}
+\title{Problem Statement and Goals\\Binary Star System Simulator}
 
-\author{\authname}
+\author{Xinlu Yan}
 
-\date{}
+\date{Jan 15, 2026}
 
 \input{../Comments.text}
 \input{../Common.text}
@@ -22,72 +22,77 @@
 \toprule
 \textbf{Date} & \textbf{Developer(s)} & \textbf{Change}\\
 \midrule
-Date1 & Name(s) & Description of changes\\
-Date2 & Name(s) & Description of changes\\
-... & ... & ...\\
+Jan 15, 2026 & Xinlu Yan & Initial document\\
 \bottomrule
 \end{tabularx}
 \end{table}
 
 \section{Problem Statement}
 
-\wss{You should check your problem statement with the
-\href{https://smiths.github.io/capTemplate/Checklists/ProbState-Checklist.pdf}
-{problem statement checklist}}. 
-
-\wss{You can change the section headings, as long as you include the required
-information.}
-
 \subsection{Problem}
+
+Binary stars are very common in space. Since two stars orbit each other due to gravity, 
+studying them helps us understand how mass is distributed and how orbits stay stable. 
+For this project, the goal is to create a model that shows how these stars move over time.
+
+The main challenge is that gravity is constantly changing as the stars move, so we can't 
+just use a simple formula to find their positions at any time. Instead, we need to use 
+a computer program to calculate the orbit step-by-step. The objective of this project 
+is to develop a reliable software tool that can take initial data (like mass and velocity) 
+and accurately simulate how the binary system evolves.
+
 
 \subsection{Inputs and Outputs}
 
-\wss{Characterize the problem in terms of ``high level'' inputs and outputs.  
-Use abstraction so that you can avoid details.}
+The system's inputs consist of the initial setup of the binary star system. This includes
+the essential physical properties of both celestial bodies and their starting state in space. 
+Additionally, the inputs specify the time parameters that determine the duration and resolution
+of the simulation.
+
+The output is a time-ordered history of the system’s configuration. It provides a sequence of 
+the orbital states for both bodies, showing how their positions and movements change over the 
+requested time frame. This data serves as the basis for analyzing the system's overall stability 
+and behavior.
 
 \subsection{Stakeholders}
 
+The primary stakeholders of this project include:
+
+\begin{itemize}
+  \item \textbf{Astronomy Students and Educators}: Those using the simulation as a learning tool to 
+  visualize orbital mechanics and understand how gravitational systems work.
+  \item \textbf{Astrophysics Researchers}: People who need a reliable tool to test different orbital 
+  scenarios and observe the qualitative behavior of binary systems.
+  \item \textbf{Scientific Software Developers}: Future developers or students who will take over the 
+  code to add new features or integrate it into larger educational platforms.
+\end{itemize}
+
+
 \subsection{Environment}
 
-\wss{Hardware and Software Environment for the users.  The developer environment
-is summarized as part of the developer plan.}
+The software is designed to run on standard personal computers and does not require specialized hardware. 
+It is intended for use in typical educational and research settings, such as classrooms or labs. 
+The system relies on a standard scientific computing environment and produces outputs in formats compatible 
+with common data analysis and visualization tools, so users can readily plot and inspect the results.
 
 \section{Goals}
 
+\begin{itemize}
+  \item To provide a clear and well-defined formulation of the problem of modeling the orbital evolution 
+  of a binary star system.
+  \item To generate predictions of system behavior that are consistent with established physical principles.
+  \item To support the systematic generation of software artifacts, including requirements documentation and 
+  a reference implementation, in a consistent and maintainable manner.
+\end{itemize}
+
 \section{Stretch Goals}
 
-\wss{Goals you hope to get to, but not necessary.  They are also helpful if the
-scope of the original project needs to be expanded.}
+\begin{itemize}
+  \item Provide visual representations of orbital trajectories, such as plots or animations, to enhance 
+  interpretability for educational and research use.
+  \item Support a wider range of initial configurations, including extreme scenarios, to explore the 
+  robustness and limitations of the model.
+\end{itemize}
 
-\section{Extras}
-
-\wss{For CAS 741: State whether the project is a research project. This
-designation, with the approval (or request) of the instructor, can be modified
-over the course of the term.}
-
-\wss{For SE Capstone: List your extras.  Potential extras include usability
-testing, code walkthroughs, user documentation, formal proof, GenderMag
-personas, Design Thinking, etc.  (The full list is on the course outline and in
-Lecture 02.) Normally the number of extras will be two.  Approval of the extras
-will be part of the discussion with the instructor for approving the project.
-The extras, with the approval (or request) of the instructor, can be modified
-over the course of the term.}
-
-\newpage{}
-
-\section*{Appendix --- Reflection}
-
-\wss{Not required for CAS 741}
-
-\input{../Reflection.text}
-
-\begin{enumerate}
-    \item What went well while writing this deliverable? 
-    \item What pain points did you experience during this deliverable, and how
-    did you resolve them?
-    \item How did you and your team adjust the scope of your goals to ensure
-    they are suitable for a Capstone project (not overly ambitious but also of
-    appropriate complexity for a senior design project)?
-\end{enumerate}  
 
 \end{document}
