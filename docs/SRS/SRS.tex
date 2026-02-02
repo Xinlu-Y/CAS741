@@ -19,7 +19,7 @@
 \usepackage{pdflscape}
 \usepackage{afterpage}
 
-\usepackage[round]{natbib}
+\usepackage[numbers]{natbib}
 
 %\usepackage{refcheck}
 
@@ -85,7 +85,8 @@
 \newpage
 \noindent \rule{\textwidth}{0.5mm}
 
-\paragraph{RefName: } \textbf{#2} \phantomsection 
+\refstepcounter{theorynum}
+\paragraph{RefName: } \textbf{\tthetheorynum} \phantomsection 
 \label{#2}
 
 \paragraph{Label:} #3
@@ -128,8 +129,8 @@
 
 \begin{document}
 
-\title{Software Requirements Specification for \progname: subtitle describing software} 
-\author{\authname}
+\title{Software Requirements Specification for BSS:\\ A Binary Star System Simulator} 
+\author{Xinlu Yan}
 \date{\today}
 	
 \maketitle
@@ -147,7 +148,7 @@
 \begin{tabularx}{\textwidth}{p{3cm}p{2cm}X}
 \toprule {\bf Date} & {\bf Version} & {\bf Notes}\\
 \midrule
-Date 1 & 1.0 & Notes\\
+Jan. 27, 2026 & 1.0 & Template imported.\\
 Date 2 & 1.1 & Notes\\
 \bottomrule
 \end{tabularx}
@@ -176,59 +177,47 @@ description of the unit and the SI name.
 \renewcommand{\arraystretch}{1.2}
 %\begin{table}[ht]
   \noindent \begin{tabular}{l l l} 
-    \toprule		
-    \textbf{symbol} & \textbf{unit} & \textbf{SI}\\
-    \midrule 
-    \si{\metre} & length & metre\\
-    \si{\kilogram} & mass	& kilogram\\
-    \si{\second} & time & second\\
-    \si{\celsius} & temperature & centigrade\\
-    \si{\joule} & energy & joule\\
-    \si{\watt} & power & watt (W = \si{\joule\per\second})\\
-    \bottomrule
+  \toprule		
+  \textbf{symbol} & \textbf{quantity} & \textbf{SI name}\\
+  \midrule 
+  \si{\metre} & length & metre\\
+  \si{\kilogram} & mass & kilogram\\
+  \si{\second} & time & second\\
+  \si{\metre\per\second} & velocity & metre per second\\
+  \si{\metre\per\second\squared} & acceleration & metre per second squared\\
+  \si{\newton} & force & newton\\
+  \si{\metre\cubed\per\kilogram\per\second\squared} & derived (for $G$) & metre cubed per kilogram per second squared\\
+  \bottomrule
   \end{tabular}
   %	\caption{Provide a caption}
 %\end{table}
 
-\plt{Only include the units that your SRS actually uses.}
-
-\plt{Derived units, like newtons, pascal, etc, should show their derivation
-    (the units they are derived from) if their constituent units are in the
-    table of units (that is, if the units they are derived from are used in the
-    document).  For instance, the derivation of pascals as
-    $\si{\pascal}=\si{\newton\per\square\meter}$ is shown if newtons and m are
-    both in the table.  The derivations of newtons would not be shown if kg and
-    s are not both in the table.}
-
-\plt{The symbol for units named after people use capital letters, but the name
-  of the unit itself uses lower case.  For instance, pascals use the symbol Pa,
-  watts use the symbol W, teslas use the symbol T, newtons use the symbol N,
-  etc.  The one exception to this is degree Celsius.  Details on writing metric
-  units can be found on the 
-  \href{https://www.nist.gov/pml/weights-and-measures/writing-metric-units}
-  {NIST} web-page.}
-
 \subsection{Table of Symbols}
 
 The table that follows summarizes the symbols used in this document along with
-their units.  The choice of symbols was made to be consistent with the heat
-transfer literature and with existing documentation for solar water heating
-systems.  The symbols are listed in alphabetical order.
+their units.
+The choice of symbols was made to be consistent with the literature related to materials.
 
 \renewcommand{\arraystretch}{1.2}
-%\noindent \begin{tabularx}{1.0\textwidth}{l l X}
 \noindent \begin{longtable*}{l l p{12cm}} \toprule
 \textbf{symbol} & \textbf{unit} & \textbf{description}\\
-\midrule 
-$A_C$ & \si[per-mode=symbol] {\square\metre} & coil surface area
-\\
-$A_\text{in}$ & \si[per-mode=symbol] {\square\metre} & surface area over which
-heat is transferred in
-\\ 
+\midrule
+$G$ & \si{\metre\cubed\per\kilogram\per\second\squared} & gravitational constant \\
+$m_1$ & \si{\kilogram} & mass of star 1 \\
+$m_2$ & \si{\kilogram} & mass of star 2 \\
+$\mathbf{r}_1(t)$ & \si{\metre} & position vector of star 1 at time $t$ (in $\mathbb{R}^2$) \\
+$\mathbf{r}_2(t)$ & \si{\metre} & position vector of star 2 at time $t$ (in $\mathbb{R}^2$) \\
+$\mathbf{r}_{12}(t)$ & \si{\metre} & relative position vector $\mathbf{r}_1(t)-\mathbf{r}_2(t)$ \\
+$r_{12}(t)$ & \si{\metre} & separation distance $\lVert \mathbf{r}_{12}(t) \rVert$ \\
+$\mathbf{v}_1(t)$ & \si{\metre\per\second} & velocity vector of star 1 at time $t$ \\
+$\mathbf{v}_2(t)$ & \si{\metre\per\second} & velocity vector of star 2 at time $t$ \\
+$\mathbf{a}_1(t)$ & \si{\metre\per\second\squared} & acceleration vector of star 1 at time $t$ \\
+$\mathbf{a}_2(t)$ & \si{\metre\per\second\squared} & acceleration vector of star 2 at time $t$ \\
+$\mathbf{F}_{12}$ & \si{\newton} & gravitational force on star 1 due to star 2 \\
+$t$ & \si{\second} & time \\
+$t_{\text{final}}$ & \si{\second} & end time of the simulation interval \\
 \bottomrule
 \end{longtable*}
-\plt{Use your problems actual symbols.  The si package is a good idea to use for
-  units.}
 
 \subsection{Abbreviations and Acronyms}
 
@@ -238,203 +227,116 @@ heat is transferred in
   \textbf{symbol} & \textbf{description}\\
   \midrule 
   A & Assumption\\
+  BSS & Binary Star System Simulator\\
   DD & Data Definition\\
   GD & General Definition\\
   GS & Goal Statement\\
   IM & Instance Model\\
+  IVP & Initial Value Problem\\
   LC & Likely Change\\
   PS & Physical System Description\\
   R & Requirement\\
   SRS & Software Requirements Specification\\
-  \progname{} & \plt{put an expanded version of your program name here (as appropriate)}\\
   TM & Theoretical Model\\
   \bottomrule
 \end{tabular}\\
 
-\plt{Add any other abbreviations or acronyms that you add}
-
 \subsection{Mathematical Notation}
-
-\plt{This section is optional, but should be included for projects that make use
-  of notation to convey mathematical information.  For instance, if typographic
-  conventions (like bold face font) are used to distinguish matrices, this
-  should be stated here.  If symbols are used to show mathematical operations,
-  these should be summarized here.  In some cases the easiest way to summarize
-  the notation is to point to a text or other source that explains the
-  notation.}
-
-\plt{This section was added to the template because some students use very
-  domain specific notation.  This notation will not be readily understandable to
-  people outside of your domain.  It should be explained.}
+Vectors are denoted by bold symbols (e.g., $\mathbf{r}$ and $\mathbf{v}$).
+The Euclidean norm of a vector $\mathbf{x}$ is written as $\lVert \mathbf{x} \rVert$.
 
 \newpage
-
 \pagenumbering{arabic}
-
-\plt{This SRS template is based on \citet{SmithAndLai2005, SmithEtAl2007,
-  SmithAndKoothoor2016}.  It will get you started.  You should not modify the
-  section headings, without first discussing the change with the course
-  instructor.  Modification means you are not following the template, which
-  loses some of the advantage of a template, especially standardization.
-  Although the bits shown below do not include type information, you may need to
-  add this information for your problem.  If you are unsure, please can ask the
-  instructor.}
-
-\plt{Feel free to change the appearance of the report by modifying the LaTeX
-  commands.}
-
-\plt{This template document assumes that a single program is being documented.
-  If you are documenting a family of models, you should start with a commonality
-  analysis.  A separate template is provided for this.  For program
-  families you should look at \cite{Smith2006, SmithMcCutchanAndCarette2017}.
-  Single family member programs are often programs based on a single physical
-  model.  General purpose tools are usually documented as a family.  Families of
-  physical models also come up.}
-
-\plt{The SRS is not generally written, or read, sequentially.  The SRS is a
-  reference document.  It is generally read in an ad hoc order, as the need
-  arises.  For writing an SRS, and for reading one for the first time, the
-  suggested order of sections is:
-\begin{itemize}
-\item Goal Statement
-\item Instance Models
-\item Requirements
-\item Introduction
-\item Specific System Description
-\end{itemize}
-}
-
-\plt{Guiding principles for the SRS document:
-\begin{itemize}
-\item Do not repeat the same information at the same abstraction level.  If
-  information is repeated, the repetition should be at a different abstraction
-  level.  For instance, there will be overlap between the scope section and the
-  assumptions, but the scope section will not go into as much detail as the
-  assumptions section.
-\end{itemize}
-}
-
-\plt{The template description comments should be disabled before submitting this
-  document for grading.}
-
-\plt{You can borrow any wording from the text given in the template.  It is part
-  of the template, and not considered an instance of academic integrity.  Of
-  course, you need to cite the source of the template.}
-
-\plt{When the documentation is done, it should be possible to trace back to the
-  source of every piece of information.  Some information will come from
-  external sources, like terminology.  Other information will be derived, like
-  General Definitions.}
-
-\plt{An SRS document should have the following qualities: unambiguous,
-  consistent, complete, validatable, abstract and traceable.}
-
-\plt{The overall goal of the SRS is that someone that meets the Characteristics
-  of the Intended Reader (Section~\ref{sec_IntendedReader}) can learn,
-  understand and verify the captured domain knowledge.  They should not have to
-  trust the authors of the SRS on any statements.  They should be able to
-  independently verify/derive every statement made.}
-
 \section{Introduction}
 
-\plt{The introduction section is written to introduce the problem.  It starts
-  general and focuses on the problem domain. The general advice is to start with
-a paragraph or two that describes the problem, followed by a ``roadmap''
-paragraph.  A roadmap orients the reader by telling them what sub-sections to
-expect in the Introduction section.}
+Binary star systems are common in astronomy. Two stars orbit because of gravity.
+Studying their motion helps us understand basic mechanics and gravitational
+interaction. Many binary systems can be simplified as two bodies affected only
+by each other’s gravity.
+
+Software can be used to simulate how a binary star system evolves over time.
+Such simulations are useful for learning and for analysis. In this document, a
+software artifact that meets these requirements is called Binary Star System Simulator (BSS).
+
+This document presents the Software Requirements Specification (SRS) for
+BSS. It explains the purpose of the document and the scope of the
+requirements.
 
 \subsection{Purpose of Document}
 
-\plt{This section summarizes the purpose of the SRS document.  It does not focus
-  on the problem itself.  The problem is described in the ``Problem
-  Description'' section (Section~\ref{Sec_pd}).  The purpose is for the document
-  in the context of the project itself, not in the context of this course.
-  Although the ``purpose'' of the document is to get a grade, you should not
-  mention this.  Instead, ``fake it'' as if this is a real project.  The purpose
-  section will be similar between projects.  The purpose of the document is the
-  purpose of the SRS, including communication, planning for the design stage,
-  etc.}
+The purpose of this document is to describe what the software must do to
+simulate a binary star system. It states the assumptions, inputs, and outputs.
+It also helps developers build and verify the software.
 
-\subsection{Scope of Requirements} 
+This SRS supports traceability from the physical problem to the models and the
+final software. It does not prescribe implementation details such as numerical
+methods, programming languages, or tools.
 
-\plt{Modelling the real world requires simplification.  The full complexity of
-  the actual physics, chemistry, biology is too much for existing models, and
-  for existing computational solution techniques.  Rather than say what is in
-  the scope, it is usually easier to say what is not.  You can think of it as
-  the scope is initially everything, and then it is constrained to create the
-  actual scope.  For instance, the problem can be restricted to 2 dimensions, or
-  it can ignore the effect of temperature (or pressure) on the material
-  properties, etc.}  
+\subsection{Scope of Requirements} \label{sec_Scope}
 
-\plt{The scope section is related to the assumptions section
-  (Section~\ref{sec_assumpt}).  However, the scope and the assumptions are not
-  at the same level of abstraction.  The scope is at a high level.  The focus is
-  on the ``big picture'' assumptions.  The assumptions section lists, and
-  describes, all of the assumptions.}
+The requirements analyze the problem described in Section~\ref{Sec_pd} and the
+related solution described in Section~\ref{sec_instance} under Newtonian gravitation. The
+system is modeled as two point masses in a two-dimensional space, and the
+software computes their motion from given initial conditions over a specified
+time span.
 
-\plt{The scope section is relevant for later determining typical values of inputs. The scope should make it clear what inputs are reasonable to expect. This is a distinction between scope and context (context is a later section).  Scope affects the inputs while context affects how the software will be used.}
+The scope excludes effects such as relativity, external bodies, non-gravitational
+forces, and changes in mass. These exclusions keep the problem simple and
+focused on the two-body model.
 
 \subsection{Characteristics of Intended Reader} \label{sec_IntendedReader}
 
-\plt{This section summarizes the skills and knowledge of the readers of the
-  SRS.  It does NOT have the same purpose as the ``User Characteristics''
-  section (Section~\ref{SecUserCharacteristics}).  The intended readers are the
-  people that will read, review and maintain the SRS.  They are the people that
-  will conceivably design the software that is intended to meet the
-  requirements.  The user, on the other hand, is the person that uses the
-  software that is built.  They may never read this SRS document.  Of course,
-  the same person could be a ``user'' and an ``intended reader.''}
+This document targets readers with basic undergraduate physics and mathematics.
+Readers are expected to understand Newton's laws, Newtonian gravity, and common
+calculus and linear algebra concepts such as vectors, derivatives, and
+integrals. Familiarity with introductory differential equations will help when
+reading the parts that describe how the system changes over time.
 
-\plt{The intended reader characteristics should be written as unambiguously and
-  as specifically as possible.  Rather than say, the user should have an
-  understanding of physics, say what kind of physics and at what level.  For
-  instance, is high school physics adequate, or should the reader have had a
-  graduate course on advanced quantum mechanics?}
+A stronger background in classical mechanics, especially two-body motion and
+conservation laws, will make it easier to review and audit the models and
+assumptions.
+
+This document is intended for educational use only and is provided ``as is,''
+without warranty. The author accepts no liability for any damages arising from
+its use.
+
 
 \subsection{Organization of Document}
+This document follows the SRS template as specified by Smith et al.~\citep{
+SmithAndKoothoor2016, SmithAndLai2005, SmithEtAl2007}. 
+If you are already familiar with the SRS template, the author’s recommended
+reading order is:
 
-\plt{This section provides a roadmap of the SRS document.  It will help the
-  reader orient themselves.  It will provide direction that will help them
-  select which sections they want to read, and in what order.  This section will
-  be similar between project.}
+\begin{itemize}
+  \item \nameref{Sec_pd} (Section~\ref{Sec_pd})
+  \item \nameref{sec_GoalStatements} (Section~\ref{sec_GoalStatements})
+  \item \nameref{sec_IntendedReader} (Section~\ref{sec_IntendedReader})
+  \item \nameref{sec_Scope} (Section~\ref{sec_Scope})
+  \item \nameref{sec_GeneralSystemDescription} (Section~\ref{sec_GeneralSystemDescription})
+  \item \nameref{sec_assumpt} (Section~\ref{sec_assumpt})
+  \item \nameref{sec_SpecificSystemDescription} (Section~\ref{sec_SpecificSystemDescription})
+  \item \nameref{sec_instance} (Section~\ref{sec_instance}) to \nameref{sec_theoretical} (Section~\ref{sec_theoretical})
+\end{itemize}
 
-\plt{Include a reference to the template (\citet{SmithAndLai2005, SmithEtAl2007,
-  SmithAndKoothoor2016}) you are using in the documentation in the Organization of
-  the Document section.}
-  
+The other material is referential and may be read as needed.
+\newpage
 
-\section{General System Description}
+\section{General System Description} \label{sec_GeneralSystemDescription}
 
 This section provides general information about the system.  It identifies the
 interfaces between the system and its environment, describes the user
-characteristics and lists the system constraints.  \plt{This text can likely be
-  borrowed verbatim.}
-
-\plt{The purpose of this section is to provide general information about the
-  system so the specific requirements in the next section will be easier to
-  understand. The general system description section is designed to be
-  changeable independent of changes to the functional requirements documented in
-  the specific system description. The general system description provides a
-  context for a family of related models.  The general description can stay the
-  same, while specific details are changed between family members.}
+characteristics and lists the system constraints.
 
 \subsection{System Context}
 
-\plt{Your system context will include a figure that shows the abstract view of
-  the software.  Often in a scientific context, the program can be viewed
-  abstractly following the design pattern of Inputs $\rightarrow$ Calculations
-  $\rightarrow$ Outputs.  The system context will therefore often follow this
-  pattern.  The user provides inputs, the system does the calculations, and then
-  provides the outputs to the user.  The figure should not show all of the
-  inputs, just an abstract view of the main categories of inputs (like material
-  properties, geometry, etc.).  Likewise, the outputs should be presented from
-  an abstract point of view.  In some cases the diagram will show other external
-  entities, besides the user.  For instance, when the software product is a
-  library, the user will be another software program, not an actual end user.
-  If there are system constraints that the software must work with external
-  libraries, these libraries can also be shown on the System Context diagram.
-  They should only be named with a specific library name if this is required by
-  the system constraint.}
+Figure~\ref{Fig_SystemContext} shows an abstract view of the Binary Star System
+simulation software. The rectangular node denotes the software, and the
+circular nodes denote external entities.
+
+The user provides the initial conditions and simulation settings. The software
+computes the evolution of the binary system and returns the resulting star
+trajectories. An external numerical integrator may be used to solve the
+governing equations and returns either a solution or an error.
 
 \begin{figure}[h!]
 \begin{center}
@@ -444,78 +346,62 @@ characteristics and lists the system constraints.  \plt{This text can likely be
 \end{center}
 \end{figure}
 
-\plt{For each of the entities in the system context diagram its responsibilities
-  should be listed.  Whenever possible the system should check for data quality,
-  but for some cases the user will need to assume that responsibility.  The list
-  of responsibilities should be about the inputs and outputs only, and they
-  should be abstract.  Details should not be presented here.  However, the
-  information should not be so abstract as to just say ``inputs'' and
-  ``outputs''.  A summarizing phrase can be used to characterize the inputs.
-  For instance, saying ``material properties'' provides some information, but it
-  stays away from the detail of listing every required properties.}
-
 \begin{itemize}
-\item User Responsibilities:
+  \item User Responsibilities:
+    \begin{itemize}
+      \item Providing the physical parameters of the binary star system, including stellar masses, initial positions, and initial velocities, taking required units, assumptions, and applicability of the physical model into consideration.
+      \item Providing simulation settings such as time span.
+      \item Interpreting the output of the program in accordance with this SRS document and using an audited and reliable copy of software related to this SRS.
+    \end{itemize} 
+\end{itemize}
 \begin{itemize}
-\item 
+  \item BSS Responsibilities:
+    \begin{itemize}
+      \item Detecting data type mismatches, such as invalid numerical inputs or inconsistent parameter dimensions.
+      \item Validating the applicability of the input arguments to the physical assumptions and models specified in this document.
+      \item Computing the time evolution of the binary star system under gravitational interaction and producing the corresponding trajectories.
+    \end{itemize} 
 \end{itemize}
-\item \progname{} Responsibilities:
 \begin{itemize}
-\item Detect data type mismatch, such as a string of characters instead of a
-  floating point number
-\item 
+  \item External IVP Solver Responsibilities:
+    \begin{itemize}
+      \item Attempting to solve systems of ordinary differential equations formulated as initial value problems on demand.
+    \end{itemize}
 \end{itemize}
-\end{itemize}
-
-\plt{Identify in what context the software will typically be used.  Is it for
-exploration? education? engineering work? scientific work?. Identify whether it
-will be used for mission-critical or safety-critical applications.} \plt{This
-additional context information is needed to determine how much effort should be
-devoted to the rationale section.  If the application is safety-critical, the
-bar is higher.  This is currently less structured, but analogous to, the idea to
-the Automotive Safety Integrity Levels (ASILs) that McSCert uses in their
-automotive hazard analyses.}
 
 \subsection{User Characteristics} \label{SecUserCharacteristics}
 
-\plt{This section summarizes the knowledge/skills expected of the user.
-  Measuring usability, which is often a required non-function requirement,
-  requires knowledge of a typical user.  As mentioned above, the user is a
-  different role from the ``intended reader,'' as given in
-  Section~\ref{sec_IntendedReader}.  As in Section~\ref{sec_IntendedReader}, the
-  user characteristics should be specific an unambiguous.  For instance, ``The
-  end user of \progname{} should have an understanding of undergraduate Level 1
-  Calculus and Physics.''}
+The user of this software is expected to have a basic understanding of classical
+mechanics, including Newtonian gravitation, motion under forces, and related
+concepts. If the software is used for educational purposes, an understanding
+equivalent to first-year university physics and calculus is sufficient to
+interpret the results and simulate a binary star system under simplified
+conditions.
+
+The author of this document accepts no liability and provides no warranty for any
+usage of the software. The software should be appropriately audited by qualified
+authorities and conform to applicable local laws and regulations.
 
 \subsection{System Constraints}
 
-\plt{System constraints differ from other type of requirements because they
-  limit the developers' options in the system design and they identify how the
-  eventual system must fit into the world. This is the only place in the SRS
-  where design decisions can be specified.  That is, the quality requirement for
-  abstraction is relaxed here.  However, system constraints should only be
-  included if they are truly required.}
-
-\section{Specific System Description}
+The software shall be developed using Drasil to encode the problem and generate
+a binary star system simulation based on an IVP formulation. No additional system constraints are imposed.
+\newpage
+\section{Specific System Description} \label{sec_SpecificSystemDescription}
 
 This section first presents the problem description, which gives a high-level
 view of the problem to be solved.  This is followed by the solution characteristics
 specification, which presents the assumptions, theories, definitions and finally
-the instance models.  \plt{Add any project specific details that are relevant
-  for the section overview.}
+the instance models.
 
 \subsection{Problem Description} \label{Sec_pd}
 
-\progname{} is intended to solve ... \plt{What problem does your program solve?
-The description here should be in the problem space, not the solution space.}
+BSS is intended to simulate the motion of a binary star system under
+mutual gravitational interaction. Given the physical properties of two stars
+and their initial conditions, the software determines how the positions of the
+stars evolve over time according to a simplified physical model.
 
 \subsubsection{Terminology and  Definitions}
-
-\plt{This section is expressed in words, not with equations.  It provide the
-  meaning of the different words and phrases used in the domain of the problem.
-The terminology is used to introduce concepts from the world outside of the
-mathematical model  The terminology provides a real world connection to give the
-mathematical model meaning.}
 
 This subsection provides a list of terms that are used in the subsequent
 sections and their meaning, with the purpose of reducing ambiguity and making it
@@ -523,152 +409,88 @@ easier to correctly understand the requirements:
 
 \begin{itemize}
 
-\item 
+\item binary star system: a system consisting of two stars that orbit around
+their common center of mass due to gravitational interaction.
+
+\item star: a massive astronomical object that is treated as a point mass in
+the context of this document.
+
+\item gravitational interaction: the mutual attractive force between two masses
+as described by Newtonian gravity.
+
+\item initial conditions: the positions and velocities of the stars at the
+start of the simulation.
+
+\item trajectory: the path traced by a star in space as a function of time.
+
+\item center of mass: the point representing the average position of the mass
+distribution of the system.
+
+\item inertial reference frame: a reference frame in which Newton’s laws of
+motion are valid without the introduction of fictitious forces.
+
+\item simulation time span: the duration over which the evolution of the system
+is computed.
 
 \end{itemize}
+
 
 \subsubsection{Physical System Description} \label{sec_phySystDescrip}
 
-\plt{The purpose of this section is to clearly and unambiguously state the
-  physical system that is to be modelled. Effective problem solving requires a
-  logical and organized approach. The statements on the physical system to be
-  studied should cover enough information to solve the problem. The physical
-  description involves element identification, where elements are defined as
-  independent and separable items of the physical system. Some example elements
-  include acceleration due to gravity, the mass of an object, and the size and
-  shape of an object. Each element should be identified and labelled, with their
-  interesting properties specified clearly. The physical description can also
-  include interactions of the elements, such as the following: i) the
-  interactions between the elements and their physical environment; ii) the
-  interactions between elements; and, iii) the initial or boundary conditions.}
+An overview of the physical system considered in this document is shown in
+Figure~\ref{Fig_PhysicalSystem}. The system consists of two stars interacting
+through mutual gravitational attraction. The stars are modeled as point masses
+moving in a two-dimensional inertial reference frame.
 
-\plt{The elements of the physical system do not have to correspond to an actual
-physical entity.  They can be conceptual.  This is particularly important when
-the documentation is for a numerical method. }
+The physical system is described at an initial time by the positions and
+velocities of the two stars. Motion is considered relative to a fixed inertial
+frame, and distances are measured using a Cartesian coordinate system. The
+center of mass of the system follows inertial motion, while each star orbits
+around the center of mass according to the gravitational interaction.
+The orbit shown in the figure is illustrative only. The actual trajectory
+depends on the initial conditions and is not necessarily elliptical.
 
-The physical system of \progname{}, as shown in Figure~?,
-includes the following elements:
-
+The physical system examined in this document therefore consists of the
+following components:
 \begin{itemize}
-
-\item[PS1:] 
-
-\item[PS2:] ...
-
+\item[PS1:] star 1, modeled as a point mass,
+\item[PS2:] star 2, modeled as a point mass,
+\item[PS3:] the Newtonian gravitational interaction between the two stars, and
+\item[PS4:] an inertial, two-dimensional Cartesian reference frame in which the motion is observed.
 \end{itemize}
 
-\plt{A figure here makes sense for most SRS documents}
+No external forces are applied to the system. As a result, the total linear
+momentum of the system is conserved, and the motion is fully determined by the
+initial conditions.
 
-% \begin{figure}[h!]
-% \begin{center}
-% %\rotatebox{-90}
-% {
-%  \includegraphics[width=0.5\textwidth]{<FigureName>}
-% }
-% \caption{\label{<Label>} <Caption>}
-% \end{center}
-% \end{figure}
+\begin{figure}[h!]
+\begin{center}
+ \includegraphics[width=0.6\textwidth]{PhysicalSystemDecription}
+\caption{Simplified Binary Star System Model}
+\label{Fig_PhysicalSystem}
+\end{center}
+\end{figure}
 
-\subsubsection{Goal Statements}
+\subsubsection{Goal Statements} \label{sec_GoalStatements}
 
-\plt{The goal statements refine the ``Problem Description''
-  (Section~\ref{Sec_pd}).  A goal is a functional objective the system under
-  consideration should achieve. Goals provide criteria for sufficient
-  completeness of a requirements specification and for requirements
-  pertinence. Goals will be refined in Section “Instanced Models”
-  (Section~\ref{sec_instance}). Large and complex goals should be decomposed
-  into smaller sub-goals.  The goals are written abstractly, with a minimal
-  amount of technical language.  They should be understandable by non-domain
-  experts.}
-
-\noindent Given the \plt{inputs}, the goal statements are:
+\noindent Given the masses, initial positions, and initial velocities of two stars, the goal statements are:
 
 \begin{itemize}
 
-\item[GS\refstepcounter{goalnum}\thegoalnum \label{G_meaningfulLabel}:] \plt{One
-    sentence description of the goal.  There may be more than one.  Each Goal
-    should have a meaningful label.}
+\item[GS\refstepcounter{goalnum}\thegoalnum \label{G_positionsOverTime}:]
+  Determine the positions of both stars as functions of time over a
+  specified simulation interval.
 
 \end{itemize}
 
 \subsection{Solution Characteristics Specification}
 
-\plt{This section specifies the information in the solution domain of the system
-  to be developed. This section is intended to express what is required in
-  such a way that analysts and stakeholders get a clear picture, and the
-  latter will accept it. The purpose of this section is to reduce the problem
-  into one expressed in mathematical terms. Mathematical expertise is used to
-  extract the essentials from the underlying physical description of the
-  problem, and to collect and substantiate all physical data pertinent to the
-  problem.}
-
-\plt{This section presents the solution characteristics by successively refining
-  models.  It starts with the abstract/general Theoretical Models (TMs) and
-  refines them to the concrete/specific Instance Models (IMs).  If necessary
-  there are intermediate refinements to General Definitions (GDs).  All of these
-  refinements can potentially use Assumptions (A) and Data Definitions (DD).
-  TMs are refined to create new models, that are called GMs or IMs. DDs are not
-  refined; they are just used. GDs and IMs are derived, or refined, from other
-  models. DDs are not derived; they are just given. TMs are also just given, but
-  they are refined, not used.  If a potential DD includes a derivation, then
-  that means it is refining other models, which would make it a GD or an IM.}
-
-\plt{The above makes a distinction between ``refined'' and ``used.'' A model is
-  refined to another model if it is changed by the refinement. When we change a
-  general 3D equation to a 2D equation, we are making a refinement, by applying
-  the assumption that the third dimension does not matter. If we use a
-  definition, like the definition of density, we aren't refining, or changing
-  that definition, we are just using it.}
-
-\plt{The same information can be a TM in one problem and a DD in another.  It is
-  about how the information is used.  In one problem the definition of
-  acceleration can be a TM, in another it would be a DD.}
-
-\plt{There is repetition between the information given in the different chunks
-  (TM, GDs etc) with other information in the document.  For instance, the
-  meaning of the symbols, the units etc are repeated.  This is so that the
-  chunks can stand on their own when being read by a reviewer/user.  It also
-  facilitates reuse of the models in a different context.}
-
-\noindent \plt{The relationships between the parts of the document are show in
-  the following figure.  In this diagram ``may ref'' has the same role as
-  ``uses'' above.  The figure adds ``Likely Changes,'' which are able to
-  reference (use) Assumptions.}
-
-\begin{figure}[H]
-  \includegraphics[scale=0.9]{RelationsBetweenTM_GD_IM_DD_A.pdf}
-\end{figure}
-
-The instance models that govern \progname{} are presented in
+The instance models that govern BSS are presented in
 Subsection~\ref{sec_instance}.  The information to understand the meaning of the
 instance models and their derivation is also presented, so that the instance
 models can be verified.
 
-\subsubsection{Types}
-
-\plt{This section is optional. Defining types can make the document easier to
-understand.}
-
-\subsubsection{Scope Decisions}
-
-\plt{This section is optional.}
-\subsubsection{Modelling Decisions}
-
-\plt{This section is optional.}
-
 \subsubsection{Assumptions} \label{sec_assumpt}
-
-\plt{The assumptions are a refinement of the scope.  The scope is general, where
-  the assumptions are specific.  All assumptions should be listed, even those
-  that domain experts know so well that they are rarely (if ever) written down.}
-\plt{The document should not take for granted that the reader knows which
-  assumptions have been made. In the case of unusual assumptions, it is
-  recommended that the documentation either include, or point to, an explanation
-  and justification for the assumption.} 
-\plt{If it helps with the organization and understandability, the assumptions
-can be presented as sub sections.  The following sub-sections are options:
-background theory assumptions, helper theory assumptions, generic theory
-assumptions, problem specific assumptions, and rationale assumptions}
 
 This section simplifies the original problem and helps in developing the
 theoretical model by filling in the missing information for the physical system.
@@ -678,55 +500,64 @@ change [LC], in which the respective assumption is used.
 
 \begin{itemize}
 
-\item[A\refstepcounter{assumpnum}\theassumpnum \label{A_meaningfulLabel}:]
-  \plt{Short description of each assumption.  Each assumption
-    should have a meaningful label.  Use cross-references to identify the
-    appropriate traceability to TM, GD, DD etc., using commands like dref, ddref
-    etc.  Each assumption should be atomic - that is, there should not be an
-    explicit (or implicit) ``and'' in the text of an assumption.}
+\item[A\refstepcounter{assumpnum}\theassumpnum \label{A_twoBody}:]
+  The system consists of exactly two stars; third-body gravitational perturbations
+  are ignored.
+
+\item[A\refstepcounter{assumpnum}\theassumpnum \label{A_isolated}:]
+  Non-gravitational forces (e.g., drag, thrust, radiation pressure) are neglected;
+  the only force modeled is mutual gravitation between the two stars.
+
+\item[A\refstepcounter{assumpnum}\theassumpnum \label{A_newtonianGravity}:]
+  The gravitational interaction between the stars is modeled using Newton's law
+  of universal gravitation.
+
+\item[A\refstepcounter{assumpnum}\theassumpnum \label{A_nonRelativistic}:]
+  The motion is modeled using classical (non-relativistic) mechanics; relativistic
+  effects are neglected.
+
+\item[A\refstepcounter{assumpnum}\theassumpnum \label{A_pointMass}:]
+  Each star is modeled as a point mass, and effects due to stellar size,
+  deformation, or rotation are neglected.
+
+\item[A\refstepcounter{assumpnum}\theassumpnum \label{A_constantMass}:]
+  The masses of the stars remain constant over time.
+
+\item[A\refstepcounter{assumpnum}\theassumpnum \label{A_inertialFrame}:]
+  The simulation is performed in an inertial reference frame.
+
+\item[A\refstepcounter{assumpnum}\theassumpnum \label{A_planar}:]
+  The motion of the binary star system is confined to a two-dimensional plane.
+
+\item[A\refstepcounter{assumpnum}\theassumpnum \label{A_nonzeroSeparation}:]
+  Collisions are out of scope: the separation distance satisfies
+  $r_{12}(t) > 0$ for all simulated times (\dref{GD:RelPosSep}),
+  so the gravitational force model remains well-defined.
 
 \end{itemize}
 
 \subsubsection{Theoretical Models}\label{sec_theoretical}
 
-\plt{Theoretical models are sets of abstract mathematical equations or axioms
-  for solving the problem described in Section ``Physical System Description''
-  (Section~\ref{sec_phySystDescrip}). Examples of theoretical models are
-  physical laws, constitutive equations, relevant conversion factors, etc.}
-
-\plt{Optionally the theory section could be divided into subsections to provide
-more structure and improve understandability and reusability.  Potential
-subsections include the following: Context theories, background theories, helper
-theories, generic theories, problem specific theories, final theories and
-rationale theories.}
-
-This section focuses on the general equations and laws that \progname{} is based
-on.  \plt{Modify the examples below for your problem, and add additional models
-  as appropriate.}
-
+This section focuses on the general equations and laws that BSS is based
+on.
 ~\newline
 
 \noindent
 \deftheory
 % #2 refname of theory
-{TM:COE}
+{TM1}
 % #3 label
-{Conservation of thermal energy}
+{Center-of-Mass Reference Frame}
 % #4 equation
 {
-  $-{\bf \nabla \cdot q} + g$ = $\rho C \frac{\partial T}{\partial t}$
+  $\mathbf{R} = \dfrac{m_1 \mathbf{r}_1 + m_2 \mathbf{r}_2}{m_1 + m_2}$
 }
 % #5 description
 {
-  The above equation gives the conservation of energy for transient heat transfer in a material
-  of specific heat capacity $C$ (\si{\joule\per\kilogram\per\celsius}) and density $\rho$ 
-  (\si{\kilogram\per\cubic\metre}), where $\bf q$ is the thermal flux vector (\si{\watt\per\square\metre}),
-  $g$ is the volumetric heat generation
-  (\si{\watt\per\cubic\metre}), $T$ is the temperature
-  (\si{\celsius}),  $t$ is time (\si{\second}), and $\nabla$ is
-  the gradient operator.  For this equation to apply, other forms
-  of energy, such as mechanical energy, are assumed to be negligible in the
-  system (\aref{A_OnlyThermalEnergy}).  In general, the material properties ($\rho$ and $C$) depend on temperature.
+  The above equation defines the center-of-mass (COM) position $\mathbf{R}$ of a
+  two-body system, where $m_1$ and $m_2$ are the masses of the two stars and
+  $\mathbf{r}_1$ and $\mathbf{r}_2$ are their position vectors.
+  In the COM reference frame, the origin is chosen such that $\mathbf{R}=\mathbf{0}$.
 }
 % #6 Notes
 {
@@ -734,17 +565,98 @@ None.
 }
 % #7 Source
 {
-  \url{http://www.efunda.com/formulae/heat_transfer/conduction/overview_cond.cfm}
+  \citep{Taylor2005}
 }
 % #8 Referenced by
 {
-  \dref{ROCT}
+  \iref{IM:Orbit}
 }
 % #9 Preconditions
 {
-None
+None.
 }
 % #1 derivation - not applicable by default
+{}
+\noindent
+\deftheory
+{TM2}
+{Kinematics: Position, Velocity, and Acceleration}
+{
+  $\mathbf{v}(t) = \dfrac{d\mathbf{r}(t)}{dt}$,
+  \quad
+  $\mathbf{a}(t) = \dfrac{d\mathbf{v}(t)}{dt} = \dfrac{d^2\mathbf{r}(t)}{dt^2}$
+}
+{
+  This model defines velocity $\mathbf{v}(t)$ and acceleration $\mathbf{a}(t)$ as
+  time derivatives of the position vector $\mathbf{r}(t)$.
+}
+{
+None.
+}
+{
+  \citep{Taylor2005}
+}
+{
+  \iref{IM:Orbit}
+}
+{
+None.
+}
+{}
+\noindent
+\deftheory
+{TM3}
+{Newton's Law of Universal Gravitation}
+{
+  $\mathbf{F}_{12} = - G \frac{m_1 m_2}{r_{12}^3}\,\mathbf{r}_{12}$,
+  where $\mathbf{r}_{12}=\mathbf{r}_{12}(t)$ and $r_{12}=r_{12}(t)$
+  (\dref{GD:RelPosSep}).
+}
+{
+  The above equation gives the gravitational force exerted between two stars of
+  masses $m_1$ and $m_2$. The force is proportional to the product of the masses
+  and inversely proportional to the square of the distance between them, acting
+  along the line joining their positions.
+}
+{
+None.
+}
+{
+  \citep{Taylor2005}
+}
+{
+  \tref{TM4}
+}
+{
+None.
+}
+{}
+\noindent
+\deftheory
+{TM4}
+{Equations of Motion for a Two-Body System}
+{
+  $m_1 \mathbf{a}_1 = \mathbf{F}_{12},
+  \quad
+  m_2 \mathbf{a}_2 = -\mathbf{F}_{12}$
+}
+{
+  This model relates the motion of each star to the gravitational force acting
+  on it according to Newton's second law of motion. Together with
+  \tref{TM3}, these equations govern the dynamics of the binary star system.
+}
+{
+None.
+}
+{
+  \citep{Taylor2005}
+}
+{
+  \iref{IM:Orbit}
+}
+{
+None.
+}
 {}
 
 \plt{``Ref.\ By'' is used repeatedly with the different types of information.
@@ -760,18 +672,7 @@ None
 
 \subsubsection{General Definitions}\label{sec_gendef}
 
-\plt{General Definitions (GDs) are a refinement of one or more TMs, and/or of
-  other GDs.  The GDs are less abstract than the TMs.  Generally the reduction
-  in abstraction is possible through invoking (using/referencing) Assumptions.
-  For instance, the TM could be Newton's Law of Cooling stated abstracting.  The
-  GD could take the general law and apply it to get a 1D equation.}
-
-This section collects the laws and equations that will be used in building the
-instance models.
-
-\plt{Some projects may not have any content for this section, but the section
-  heading should be kept.}  \plt{Modify the examples below for your problem, and
-  add additional definitions as appropriate.}
+This section collects the laws and equations that will be used in building the instance models.
 
 ~\newline
 
@@ -781,58 +682,37 @@ instance models.
 \begin{tabular}{| p{\colAwidth} | p{\colBwidth}|}
 \hline
 \rowcolor[gray]{0.9}
-Number& GD\refstepcounter{defnum}\thedefnum \label{NL}\\
+Number& GD\refstepcounter{defnum}\thedefnum \label{GD:RelPosSep}\\
 \hline
-Label &\bf Newton's law of cooling \\
+Label &\bf Relative position and separation \\
 \hline
-% Units&$MLt^{-3}T^0$\\
-% \hline
-SI Units&\si{\watt\per\square\metre}\\
+SI Units&\si{\metre}\\
 \hline
-Equation&$ q(t) = h \Delta T(t)$  \\
+Equation&
+$\mathbf{r}_{12}(t) = \mathbf{r}_1(t) - \mathbf{r}_2(t)$, \\
+& $r_{12}(t) = \lVert \mathbf{r}_{12}(t) \rVert$
+\\
 \hline
 Description &
-Newton's law of cooling describes convective cooling from a surface.  The law is
-stated as: the rate of heat loss from a body is proportional to the difference
-in temperatures between the body and its surroundings.
-\\
-& $q(t)$ is the thermal flux (\si{\watt\per\square\metre}).\\
-& $h$ is the heat transfer coefficient, assumed independent of $T$ (\aref{A_hcoeff})
-	(\si{\watt\per\square\metre\per\celsius}).\\
-&$\Delta T(t)$= $T(t) - T_{\text{env}}(t)$ is the time-dependent thermal gradient
-between the environment and the object (\si{\celsius}).
+$\mathbf{r}_{12}(t)$ is the relative position vector from star 2 to star 1, and
+$r_{12}(t)$ is the corresponding separation distance.
 \\
 \hline
-  Source & Citation here \\
+  Source & --- \\
   \hline
-  Ref.\ By & \ddref{FluxCoil}, \ddref{FluxPCM}\\
+  Ref.\ By & \tref{TM3}, \iref{IM:Orbit}\\
   \hline
 \end{tabular}
 \end{minipage}\\
 
-\subsubsection*{Detailed derivation of simplified rate of change of temperature}
+~\newline
 
-\plt{This may be necessary when the necessary information does not fit in the
-  description field.}
-\plt{Derivations are important for justifying a given GD.  You want it to be
-  clear where the equation came from.}
+
 
 \subsubsection{Data Definitions}\label{sec_datadef}
 
-\plt{The Data Definitions are definitions of symbols and equations that are
-  given for the problem.  They are not derived; they are simply used by other
-  models.  For instance, if a problem depends on density, there may be a data
-  definition for the equation defining density.  The DDs are given information
-  that you can use in your other modules.}
-
-\plt{All Data Definitions should be used (referenced) by at least one other
-  model.}
-
 This section collects and defines all the data needed to build the instance
-models. The dimension of each quantity is also given.  \plt{Modify the examples
-  below for your problem, and add additional definitions as appropriate.}
-
-~\newline
+models. The dimension of each quantity is also given.\\
 
 \noindent
 \begin{minipage}{\textwidth}
@@ -840,73 +720,29 @@ models. The dimension of each quantity is also given.  \plt{Modify the examples
 \begin{tabular}{| p{\colAwidth} | p{\colBwidth}|}
 \hline
 \rowcolor[gray]{0.9}
-Number& DD\refstepcounter{datadefnum}\thedatadefnum \label{FluxCoil}\\
+Number& DD\refstepcounter{datadefnum}\thedatadefnum \label{DD:G}\\
 \hline
-Label& \bf Heat flux out of coil\\
+Label& \bf Gravitational constant\\
 \hline
-Symbol &$q_C$\\
+Symbol &$G$\\
 \hline
-% Units& $Mt^{-3}$\\
-% \hline
-  SI Units & \si{\watt\per\square\metre}\\
-  \hline
-  Equation&$q_C(t) = h_C (T_C - T_W(t))$, over area $A_C$\\
-  \hline
-  Description & 
-                $T_C$ is the temperature of the coil (\si{\celsius}).  $T_W$ is the temperature of the water (\si{\celsius}).  
-                The heat flux out of the coil, $q_C$ (\si{\watt\per\square\metre}), is found by
-                assuming that Newton's Law of Cooling applies (\aref{A_Newt_coil}).  This law (\dref{NL}) is used on the 
-                surface of the coil, which has area $A_C$ (\si{\square\metre}) and heat 
-                transfer coefficient $h_C$ (\si{\watt\per\square\metre\per\celsius}).  This equation
-                assumes that the temperature of the coil is constant over time (\aref{A_tcoil}) and that it does not vary along the length
-                of the coil (\aref{A_tlcoil}).
-  \\
-  \hline
-  Sources& Citation here \\
-  \hline
-  Ref.\ By & \iref{ewat}\\
-  \hline
+SI Units & \si{\metre\cubed\per\kilogram\per\second\squared}\\
+\hline
+Equation&$G = 6.67430\times 10^{-11}\ \si{\metre\cubed\per\kilogram\per\second\squared}$\\
+\hline
+Description &
+$G$ is the universal gravitational constant used in Newton's law of gravitation.
+\\
+\hline
+Sources& \citep[p.~033105-41]{CODATA2018}\\
+\hline
+Ref.\ By & \tref{TM3}, \tref{TM4}, \iref{IM:Orbit}\\
+\hline
 \end{tabular}
 \end{minipage}\\
 
 \subsubsection{Data Types}\label{sec_datatypes}
-
-\plt{This section is optional.  In many scientific computing programs it isn't
-  necessary, since the inputs and outpus are straightforward types, like reals,
-  integers, and sequences of reals and integers.  However, for some problems it
-  is very helpful to capture the type information.}
-
-\plt{The data types are not derived; they are simply stated and used by other
-  models.}
-
-\plt{All data types must be used by at least one of the models.}
-
-\plt{For the mathematical notation for expressing types, the recommendation is
-  to use the notation of~\citet{HoffmanAndStrooper1995}.}
-
-This section collects and defines all the data types needed to document the
-models. \plt{Modify the examples below for your problem, and add additional
-  definitions as appropriate.}
-
-~\newline
-
-\noindent
-\begin{minipage}{\textwidth}
-\renewcommand*{\arraystretch}{1.5}
-\begin{tabular}{| p{\colAwidth} | p{\colBwidth}|}
-  \hline
-  \rowcolor[gray]{0.9}
-  Type Name & Name for Type\\
-  \hline
-  Type Def & mathematical definition of the type\\
-  \hline
-  Description & description here
-  \\
-  \hline
-  Sources & Citation here, if the type is borrowed from another source\\
-  \hline
-\end{tabular}
-\end{minipage}\\
+The conventional data types used in undergraduate-level physics courses is sufficient. As such, the specifications define no extra data types.\\
 
 \subsubsection{Instance Models} \label{sec_instance}    
 
@@ -919,12 +755,7 @@ models. \plt{Modify the examples below for your problem, and add additional
 This section transforms the problem defined in Section~\ref{Sec_pd} into 
 one which is expressed in mathematical terms. It uses concrete symbols defined 
 in Section~\ref{sec_datadef} to replace the abstract symbols in the models 
-identified in Sections~\ref{sec_theoretical} and~\ref{sec_gendef}.
-
-The goals \plt{reference your goals} are solved by \plt{reference your instance
-  models}.  \plt{other details, with cross-references where appropriate.}
-\plt{Modify the examples below for your problem, and add additional models as
-  appropriate.}
+identified in Sections~\ref{sec_theoretical} and~\ref{sec_gendef}. The goals \gsref{G_positionsOverTime} is solved by \iref{IM:Orbit}.
 
 ~\newline
 
@@ -936,87 +767,114 @@ The goals \plt{reference your goals} are solved by \plt{reference your instance
 \begin{tabular}{| p{\colAwidth} | p{\colBwidth}|}
   \hline
   \rowcolor[gray]{0.9}
-  Number& IM\refstepcounter{instnum}\theinstnum \label{ewat}\\
+  Number & IM\refstepcounter{instnum}\theinstnum \label{IM:Orbit} \\
   \hline
-  Label& \bf Energy balance on water to find $T_W$\\
+  Label & \bf Binary Star Orbital Motion \\
   \hline
-  Input&$m_W$, $C_W$, $h_C$, $A_C$, $h_P$, $A_P$, $t_\text{final}$, $T_C$, 
-  $T_\text{init}$, $T_P(t)$ from \iref{epcm}\\
-  & The input is constrained so that $T_\text{init} \leq T_C$ (\aref{A_charge})\\
+  Input &
+  \begin{tabular}[t]{@{}l@{}}
+    $m_1$, $m_2$, $\mathbf{r}_1(0)$, $\mathbf{r}_2(0)$,
+    $\mathbf{v}_1(0)$, $\mathbf{v}_2(0)$, $t_\text{final}$
+  \end{tabular} \\
   \hline
-  Output&$T_W(t)$, $0\leq t \leq t_\text{final}$, such that\\
-  &$\frac{dT_W}{dt} = \frac{1}{\tau_W}[(T_C - T_W(t)) + {\eta}(T_P(t) - T_W(t))]$,\\
-  &$T_W(0) = T_P(0) = T_\text{init}$ (\aref{A_InitTemp}) and $T_P(t)$ from \iref{epcm} \\
+  Output &
+  \begin{tabular}[t]{@{}l@{}}
+    $\mathbf{r}_1(t)$, $\mathbf{r}_2(t)$ for $0 \le t \le t_\text{final}$,\\
+    where the output is the solution of the following IVP:
+  \end{tabular} \\
+  &
+  $m_1 \mathbf{a}_1(t) = - G \dfrac{m_1 m_2}{r_{12}(t)^3}\,\mathbf{r}_{12}(t),\quad
+  m_2 \mathbf{a}_2(t) = \phantom{-} G \dfrac{m_1 m_2}{r_{12}(t)^3}\,\mathbf{r}_{12}(t)$, \\
+  &
+  \begin{tabular}[t]{@{}l@{}}
+    with initial conditions $\mathbf{r}_1(0)$, $\mathbf{r}_2(0)$, $\mathbf{v}_1(0)$, $\mathbf{v}_2(0)$.
+  \end{tabular} \\
   \hline
-  Description&$T_W$ is the water temperature (\si{\celsius}).\\
-  &$T_P$ is the PCM temperature (\si{\celsius}).\\
-  &$T_C$ is the coil temperature (\si{\celsius}).\\
-  &$\tau_W = \frac{m_W C_W}{h_C A_C}$ is a constant (\si{\second}).\\
-  &$\eta = \frac{h_P A_P}{h_C A_C}$ is a constant (dimensionless).\\
-  & The above equation applies as long as the water is in liquid form,
-  $0<T_W<100^o\text{C}$, where $0^o\text{C}$ and $100^o\text{C}$ are the melting
-  and boiling points of water, respectively (\aref{A_OpRange}, \aref{A_Pressure}).
+  Description &
+  The above output is the solution of the above defined IVP. Here,\\
+  &
+  $\mathbf{a}_1(t)$ and $\mathbf{a}_2(t)$ are the acceleration vectors of stars 1 and 2
+  (\si{\metre\per\second\squared}). \\
+  &
+  $m_1$ and $m_2$ are the masses of the two stars (\si{\kilogram}). \\
+  &
+  $\mathbf{r}_{12}(t)$ is the relative position vector from star 2 to star 1
+  (\si{\metre}), and $r_{12}(t)=\lVert\mathbf{r}_{12}(t)\rVert$ is the corresponding
+  separation distance.
   \\
+  &
+  $G$ is the gravitational constant
+  (\si{\metre^3\per\kilogram\per\second^2}). \\
+  &
+  $t_\text{final}$ is the final simulation time (\si{\second}). \\
   \hline
-  Sources& Citation here \\
+  Sources & --- \\
   \hline
-  Ref.\ By & \iref{epcm}\\
+  Ref.\ By & --- \\
   \hline
 \end{tabular}
-\end{minipage}\\
+\end{minipage}
 
 %~\newline
 
-\subsubsection*{Derivation of ...}
+\subsubsection*{Derivation of Binary Star Orbital Motion}
 
-\plt{The derivation shows how the IM is derived from the TMs/GDs.  In cases
-  where the derivation cannot be described under the Description field, it will
-  be necessary to include this subsection.}
+This model is a direct instantiation of \tref{TM3} and \tref{TM4} as an IVP for a
+two-body system (\aref{A_twoBody}) in a planar setting (\aref{A_planar}). It
+assumes Newtonian gravitation (\aref{A_newtonianGravity}) and classical mechanics
+(\aref{A_nonRelativistic}), with point-mass stars (\aref{A_pointMass}) of constant
+masses (\aref{A_constantMass}), in an inertial frame (\aref{A_inertialFrame}), and
+neglects non-gravitational forces (\aref{A_isolated}). The relative position and
+separation are defined by \dref{GD:RelPosSep}.
 
 \subsubsection{Input Data Constraints} \label{sec_DataConstraints}    
 
-Table~\ref{TblInputVar} shows the data constraints on the input output
-variables.  The column for physical constraints gives the physical limitations
-on the range of values that can be taken by the variable.  The column for
-software constraints restricts the range of inputs to reasonable values.  The
-software constraints will be helpful in the design stage for picking suitable
-algorithms.  The constraints are conservative, to give the user of the model the
-flexibility to experiment with unusual situations.  The column of typical values
-is intended to provide a feel for a common scenario.  The uncertainty column
-provides an estimate of the confidence with which the physical quantities can be
-measured.  This information would be part of the input if one were performing an
-uncertainty quantification exercise.
+Table~\ref{TblInputVar} lists the constraints on the input variables for BSS.
+Physical constraints capture non-negotiable requirements (for example, positive
+mass). Software constraints restrict inputs to ranges that are expected to be
+numerically reasonable for the intended use of this simulator (Section~\ref{sec_Scope}).
 
-The specification parameters in Table~\ref{TblInputVar} are listed in
+The specification parameters referenced in the software constraints are listed in
 Table~\ref{TblSpecParams}.
 
 \begin{table}[!h]
   \caption{Input Variables} \label{TblInputVar}
   \renewcommand{\arraystretch}{1.2}
-\noindent \begin{longtable*}{l l l l c} 
+\noindent \begin{longtable*}{l l l l c}
   \toprule
   \textbf{Var} & \textbf{Physical Constraints} & \textbf{Software Constraints} &
                              \textbf{Typical Value} & \textbf{Uncertainty}\\
-  \midrule 
-  $L$ & $L > 0$ & $L_{\text{min}} \leq L \leq L_{\text{max}}$ & 1.5 \si[per-mode=symbol] {\metre} & 10\%
-  \\
+  \midrule
+  $m_1$ & $m_1 > 0$ & $m_{\min} \le m_1 \le m_{\max}$ & $2.0\times 10^{30}\,\si{kg}$ & 5\% \\
+  $m_2$ & $m_2 > 0$ & $m_{\min} \le m_2 \le m_{\max}$ & $1.6\times 10^{30}\,\si{kg}$ & 5\% \\
+  $\mathbf{r}_1(0)$ & $\mathbf{r}_1(0)\in\mathbb{R}^2$ & $\lVert \mathbf{r}_1(0) \rVert \le r_{\max}$ & $(+7.5\times 10^{10},0)\,\si{m}$ & 1\% \\
+  $\mathbf{r}_2(0)$ & $\mathbf{r}_2(0)\in\mathbb{R}^2$ & $\lVert \mathbf{r}_2(0) \rVert \le r_{\max}$ & $(-7.5\times 10^{10},0)\,\si{m}$ & 1\% \\
+  $\mathbf{v}_1(0)$ & $\mathbf{v}_1(0)\in\mathbb{R}^2$ & $\lVert \mathbf{v}_1(0) \rVert \le v_{\max}$ & $(0,+1.0\times 10^{4})\,\si{m\per s}$ & 5\% \\
+  $\mathbf{v}_2(0)$ & $\mathbf{v}_2(0)\in\mathbb{R}^2$ & $\lVert \mathbf{v}_2(0) \rVert \le v_{\max}$ & $(0,-1.0\times 10^{4})\,\si{m\per s}$ & 5\% \\
+  $t_{\text{final}}$ & $t_{\text{final}} > 0$ & $t_{\min} \le t_{\text{final}} \le t_{\max}$ & $3.15\times 10^{7}\,\si{s}$ & --- \\
   \bottomrule
 \end{longtable*}
 \end{table}
 
-\noindent 
+\noindent
 \begin{description}
-\item[(*)] \plt{you might need to add some notes or clarifications}
+\item[(*)] In the center-of-mass frame used by \iref{IM:Orbit}, the initial
+positions must satisfy $m_1\mathbf{r}_1(0)+m_2\mathbf{r}_2(0)=\mathbf{0}$.
 \end{description}
 
 \begin{table}[!h]
 \caption{Specification Parameter Values} \label{TblSpecParams}
 \renewcommand{\arraystretch}{1.2}
-\noindent \begin{longtable*}{l l} 
+\noindent \begin{longtable*}{l l}
   \toprule
   \textbf{Var} & \textbf{Value} \\
-  \midrule 
-  $L_\text{min}$ & 0.1 \si{\metre}\\
+  \midrule
+  $m_{\min}$ & $1.0\times 10^{29}\,\si{kg}$\\
+  $m_{\max}$ & $1.0\times 10^{32}\,\si{kg}$\\
+  $r_{\max}$ & $10^{13}\,\si{m}$\\
+  $v_{\max}$ & $10^6\,\si{m\per s}$\\
+  $t_{\min}$ & $10^3\,\si{s}$\\
+  $t_{\max}$ & $10^{10}\,\si{s}$\\
   \bottomrule
 \end{longtable*}
 \end{table}
@@ -1024,29 +882,20 @@ Table~\ref{TblSpecParams}.
 \subsubsection{Properties of a Correct Solution} \label{sec_CorrectSolution}
 
 \noindent
-A correct solution must exhibit \plt{fill in the details}.  \plt{These
-  properties are in addition to the stated requirements.  There is no need to
-  repeat the requirements here.  These additional properties may not exist for
-  every problem.  Examples include conservation laws (like conservation of
-  energy or mass) and known constraints on outputs, which are usually summarized
-  in tabular form.  A sample table is shown in Table~\ref{TblOutputVar}}
+A correct solution must exhibit with the limitations as defined in Table~\ref{TblOutputVar}.
 
 \begin{table}[!h]
 \caption{Output Variables} \label{TblOutputVar}
 \renewcommand{\arraystretch}{1.2}
-\noindent \begin{longtable*}{l l} 
+\noindent \begin{longtable*}{l l}
   \toprule
   \textbf{Var} & \textbf{Physical Constraints} \\
-  \midrule 
-  $T_W$ & $T_\text{init} \leq T_W \leq T_C$ (by~\aref{A_charge})
-  \\
+  \midrule
+  $\mathbf{r}_1(t)$ & $\mathbf{r}_1(t) \in \mathbb{R}^2$ for $0 \le t \le t_{\text{final}}$ \\
+  $\mathbf{r}_2(t)$ & $\mathbf{r}_2(t) \in \mathbb{R}^2$ for $0 \le t \le t_{\text{final}}$ \\
   \bottomrule
 \end{longtable*}
 \end{table}
-
-\plt{This section is not for test cases or techniques for verification and
-  validation.  Those topics will be addressed in the Verification and Validation
-  plan.}
 
 \section{Requirements}
 
@@ -1061,22 +910,23 @@ qualities that the software is expected to exhibit.
 
 \noindent \begin{itemize}
 
-\item[R\refstepcounter{reqnum}\thereqnum \label{R_Inputs}:] \plt{Requirements
-    for the inputs that are supplied by the user.  This information has to be
-    explicit.}
+\item[R\refstepcounter{reqnum}\thereqnum \label{R_Inputs}:] The inputs shall be provided by the end user according to the data definitions
+specified in Table~\ref{TblInputVar}.
 
-\item[R\refstepcounter{reqnum}\thereqnum \label{R_OutputInputs}:] \plt{It isn't
-    always required, but often echoing the inputs as part of the output is a
-    good idea.}
+\item[R\refstepcounter{reqnum}\thereqnum \label{R_OutputInputs}:] The inputs of BSS shall be displayed to the user before any meaningful
+computation begins.
 
-\item[R\refstepcounter{reqnum}\thereqnum \label{R_Calculate}:] \plt{Calculation
-    related requirements.}
+\item[R\refstepcounter{reqnum}\thereqnum \label{R_Calculate}:] The provided inputs shall be validated against the constraints specified in
+Table~\ref{TblInputVar}.
 
 \item[R\refstepcounter{reqnum}\thereqnum \label{R_VerifyOutput}:]
-  \plt{Verification related requirements.}
+The software shall verify that the computed results satisfy the consistency
+conditions defined by the instance models in Section~\ref{sec_instance}.
 
-\item[R\refstepcounter{reqnum}\thereqnum \label{R_Output}:] \plt{Output related
-    requirements.}
+\item[R\refstepcounter{reqnum}\thereqnum \label{R_Output}:]
+The software shall compute and output the system state variables specified in
+Table~\ref{TblOutputVar} in accordance with the instance models described in Section~\ref{sec_instance}.
+
 
 \end{itemize}
 
@@ -1105,63 +955,64 @@ be covered in the Verification and Validation document.}
 \noindent \begin{itemize}
 
 \item[NFR\refstepcounter{nfrnum}\thenfrnum \label{NFR_Accuracy}:]
-  \textbf{Accuracy} \plt{Characterize the accuracy by giving the context/use for
-    the software.  Maybe something like, ``The accuracy of the computed
-    solutions should meet the level needed for $<$engineering or scientific
-    application$>$.  The level of accuracy achieved by \progname{} shall be
-    described following the procedure given in Section~X of the Verification and
-    Validation Plan.''  A link to the VnV plan would be a nice extra.}
+  \textbf{Accuracy} The accuracy of the computed solutions shall meet the level required for the
+intended scientific and educational usage domain. Confidence in the accuracy of
+the software shall be established by following the procedures outlined in the
+Verification and Validation Plan.
 
 \item[NFR\refstepcounter{nfrnum}\thenfrnum \label{NFR_Usability}:] \textbf{Usability}
-  \plt{Characterize the usability by giving the context/use for the software.
-    You should likely reference the user characteristics section.  The level of
-    usability achieved by the software shall be described following the
-    procedure given in Section~X of the Verification and Validation Plan.  A
-    link to the VnV plan would be a nice extra.}
+  The outputs of BSS should be easy to inspect and reuse. In particular,
+the software should export results in a consistent format so that users can
+post-process and visualize trajectories with external tools. The usability of
+the software will be discussed and evaluated following the procedure in the
+Verification and Validation Plan.
 
 \item[NFR\refstepcounter{nfrnum}\thenfrnum \label{NFR_Maintainability}:]
-  \textbf{Maintainability} \plt{The effort required to make any of the likely
-    changes listed for \progname{} should be less than FRACTION of the original
-    development time.  FRACTION is then a symbolic constant that can be defined
-    at the end of the report.}
+  \textbf{Maintainability} The specification and models are encoded using Drasil. This should make routine
+updates (e.g., adjusting parameters or refining assumptions) manageable and
+predictable. When changes are made, their impact on the generated artifacts
+should be clear and traceable.
 
 \item[NFR\refstepcounter{nfrnum}\thenfrnum \label{NFR_Portability}:]
-  \textbf{Portability} \plt{This NFR is easier to write than the others.  The
-    systems that \progname{} should run on should be listed here.  When possible
-    the specific versions of the potential operating environments should be
-    given.  To make the NFR verifiable a statement could be made that the tests
-    from a given section of the VnV plan can be successfully run on all of the
-    possible operating environments.}
-
-\item Other NFRs that might be discussed include verifiability,
-  understandability and reusability.
+  \textbf{Portability} BSS should run on common operating systems, including Linux, macOS, and
+Windows.
 
 \end{itemize}
 
 \subsection{Rationale}
 
-\plt{Provide a rationale for the decisions made in the documentation.  Rationale
-should be provided for scope decisions, modelling decisions, assumptions and
-typical values.}
+The scope of this document is intentionally limited to a simplified binary star
+system in order to keep the problem tractable and clearly defined. Restricting
+the system to two bodies in a two-dimensional inertial reference frame allows
+the essential physical behavior to be captured without introducing unnecessary
+complexity.
+
+The modeling choices and assumptions are based on standard practices in
+introductory classical mechanics. Newtonian gravitation is used because it is
+sufficient for describing the intended class of systems and is widely
+understood by the intended readers. Additional effects such as relativistic
+corrections and external forces are excluded to maintain focus on the core
+problem.
+
+Typical values and representations are chosen to support clarity, consistency,
+and ease of verification. The use of Drasil motivates explicit and structured
+definitions of assumptions and models, which improves traceability between the
+physical problem, the mathematical formulation, and the resulting software
+artifacts.
+
 
 \section{Likely Changes}    
 
 \noindent \begin{itemize}
 
-\item[LC\refstepcounter{lcnum}\thelcnum\label{LC_meaningfulLabel}:] \plt{Give
-    the likely changes, with a reference to the related assumption (aref), as appropriate.}
-
+\item[LC\refstepcounter{lcnum}\thelcnum\label{LC_meaningfulLabel}:] Additional derived output quantities, such as total energy
+or angular momentum, may be added to support validation and analysis of the
+simulation results.
 \end{itemize}
 
 \section{Unlikely Changes}    
 
-\noindent \begin{itemize}
-
-\item[LC\refstepcounter{lcnum}\thelcnum\label{LC_meaningfulLabel}:] \plt{Give
-    the unlikely changes.  The design can assume that the changes listed will
-    not occur.}
-
-\end{itemize}
+There are no unlikely changes.
 
 \section{Traceability Matrices and Graphs}
 
@@ -1189,29 +1040,19 @@ the assumptions.
 \begin{landscape}
 \begin{table}[h!]
 \centering
-\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}
 \hline
-	& \aref{A_OnlyThermalEnergy}& \aref{A_hcoeff}& \aref{A_mixed}& \aref{A_tpcm}& \aref{A_const_density}& \aref{A_const_C}& \aref{A_Newt_coil}& \aref{A_tcoil}& \aref{A_tlcoil}& \aref{A_Newt_pcm}& \aref{A_charge}& \aref{A_InitTemp}& \aref{A_OpRangePCM}& \aref{A_OpRange}& \aref{A_htank}& \aref{A_int_heat}& \aref{A_vpcm}& \aref{A_PCM_state}& \aref{A_Pressure} \\
+	& \aref{A_twoBody}& \aref{A_isolated}& \aref{A_newtonianGravity}& \aref{A_nonRelativistic}& \aref{A_pointMass}& \aref{A_constantMass}& \aref{A_inertialFrame}& \aref{A_planar}& \aref{A_nonzeroSeparation} \\
 \hline
-\tref{T_COE}        & X& & & & & & & & & & & & & & & & & & \\ \hline
-\tref{T_SHE}        & & & & & & & & & & & & & & & & & & & \\ \hline
-\tref{T_LHE}        & & & & & & & & & & & & & & & & & & & \\ \hline
-\dref{NL}           & & X& & & & & & & & & & & & & & & & & \\ \hline
-\dref{ROCT}         & & & X& X& X& X& & & & & & & & & & & & & \\ \hline
-\ddref{FluxCoil}    & & & & & & & X& X& X& & & & & & & & & & \\ \hline
-\ddref{FluxPCM}     & & & X& X& & & & & & X& & & & & & & & & \\ \hline
-\ddref{D_HOF}       & & & & & & & & & & & & & & & & & & & \\ \hline
-\ddref{D_MF}        & & & & & & & & & & & & & & & & & & & \\ \hline
-\iref{ewat}         & & & & & & & & & & & X& X& & X& X& X& & & X \\ \hline
-\iref{epcm}         & & & & & & & & & & & & X& X& & & X& X& X& \\ \hline
-\iref{I_HWAT}       & & & & & & & & & & & & & & X& & & & & X \\ \hline
-\iref{I_HPCM}       & & & & & & & & & & & & & X& & & & & X & \\ \hline
-\lcref{LC_tpcm}     & & & & X& & & & & & & & & & & & & & & \\ \hline
-\lcref{LC_tcoil}    & & & & & & & & X& & & & & & & & & & & \\ \hline
-\lcref{LC_tlcoil}   & & & & & & & & & X& & & & & & & & & & \\ \hline
-\lcref{LC_charge}   & & & & & & & & & & & X& & & & & & & & \\ \hline
-\lcref{LC_InitTemp} & & & & & & & & & & & & X& & & & & & & \\ \hline
-\lcref{LC_htank}    & & & & & & & & & & & & & & & X& & & & \\
+\tref{TM1}            & & & & & & & & & \\ \hline
+\tref{TM2}            & & & & & & & & & \\ \hline
+\tref{TM3}            & & & X& & & & & & X\\ \hline
+\tref{TM4}            & & & & X& & & X& & \\ \hline
+\dref{GD:RelPosSep}   & & & & & & & & X& \\ \hline
+\ddref{DD:G}          & & & & & & & & & \\ \hline
+\iref{IM:Orbit}       & X& X& X& X& X& X& X& X& X\\
+\hline
+\lcref{LC_meaningfulLabel} & X& X& X& X& X& X& X& X& X\\
 \hline
 \end{tabular}
 \caption{Traceability Matrix Showing the Connections Between Assumptions and Other Items}
@@ -1222,24 +1063,17 @@ the assumptions.
 
 \begin{table}[h!]
 \centering
-\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
-\hline        
-	& \tref{T_COE}& \tref{T_SHE}& \tref{T_LHE}& \dref{NL}& \dref{ROCT} & \ddref{FluxCoil}& \ddref{FluxPCM} & \ddref{D_HOF}& \ddref{D_MF}& \iref{ewat}& \iref{epcm}& \iref{I_HWAT}& \iref{I_HPCM} \\
+\begin{tabular}{|c|c|c|c|c|c|c|c|}
 \hline
-\tref{T_COE}     & & & & & & & & & & & & & \\ \hline
-\tref{T_SHE}     & & & X& & & & & & & & & & \\ \hline
-\tref{T_LHE}     & & & & & & & & & & & & & \\ \hline
-\dref{NL}        & & & & & & & & & & & & & \\ \hline
-\dref{ROCT}      & X& & & & & & & & & & & & \\ \hline
-\ddref{FluxCoil} & & & & X& & & & & & & & & \\ \hline
-\ddref{FluxPCM}  & & & & X& & & & & & & & & \\ \hline
-\ddref{D_HOF}    & & & & & & & & & & & & & \\ \hline
-\ddref{D_MF}     & & & & & & & & X& & & & & \\ \hline
-\iref{ewat}      & & & & & X& X& X& & & & X& & \\ \hline
-\iref{epcm}      & & & & & X& & X& & X& X& & & X \\ \hline
-\iref{I_HWAT}    & & X& & & & & & & & & & & \\ \hline
-\iref{I_HPCM}    & & X& X& & & & X& X& X& & X& & \\
+	& \tref{TM1} & \tref{TM2} & \tref{TM3} & \tref{TM4} & \dref{GD:RelPosSep} & \ddref{DD:G} & \iref{IM:Orbit} \\
 \hline
+\tref{TM1}          &  &  &  &  &  &  &  \\ \hline
+\tref{TM2}          &  &  &  &  &  &  &  \\ \hline
+\tref{TM3}          &  &  &  &  & X& X&  \\ \hline
+\tref{TM4}          &  &  & X&  &  &  &  \\ \hline
+\dref{GD:RelPosSep} &  &  &  &  &  &  &  \\ \hline
+\ddref{DD:G}        &  &  &  &  &  &  &  \\ \hline
+\iref{IM:Orbit}     & X& X& X& X& X& X&  \\ \hline
 \end{tabular}
 \caption{Traceability Matrix Showing the Connections Between Items of Different Sections}
 \label{Table:trace}
@@ -1249,38 +1083,18 @@ the assumptions.
 \centering
 \begin{tabular}{|c|c|c|c|c|c|c|c|}
 \hline
-	& \iref{ewat}& \iref{epcm}& \iref{I_HWAT}& \iref{I_HPCM}& \ref{sec_DataConstraints}& \rref{R_RawInputs}& \rref{R_MassInputs} \\
+	& \iref{IM:Orbit} & \ref{sec_DataConstraints} & \rref{R_Inputs} & \rref{R_OutputInputs} & \rref{R_Calculate} & \rref{R_VerifyOutput} & \rref{R_Output} \\
 \hline
-\iref{ewat}            & & X& & & & X& X \\ \hline
-\iref{epcm}            & X& & & X& & X& X \\ \hline
-\iref{I_HWAT}          & & & & & & X& X \\ \hline
-\iref{I_HPCM}          & & X& & & & X& X \\ \hline
-\rref{R_RawInputs}     & & & & & & & \\ \hline
-\rref{R_MassInputs}    & & & & & & X& \\ \hline
-\rref{R_CheckInputs}   & & & & & X& & \\ \hline
-\rref{R_OutputInputs}  & X& X& & & & X& X \\ \hline
-\rref{R_TempWater}     & X& & & & & & \\ \hline 
-\rref{R_TempPCM}       & & X& & & & & \\ \hline
-\rref{R_EnergyWater}   & & & X& & & & \\ \hline
-\rref{R_EnergyPCM}     & & & & X& & & \\ \hline
-\rref{R_VerifyOutput}  & & & X& X& & & \\ \hline
-\rref{R_timeMeltBegin} & & X& & & & & \\ \hline
-\rref{R_timeMeltEnd}   & & X& & & & & \\ 
-\hline
+\iref{IM:Orbit}                &  & X& X&  & X&  & X\\ \hline
+\rref{R_Inputs}                &  & X&  &  &  &  &  \\ \hline
+\rref{R_OutputInputs}          & X&  & X&  &  &  & X\\ \hline
+\rref{R_Calculate}             & X& X& X&  &  &  &  \\ \hline
+\rref{R_VerifyOutput}          & X&  &  &  & X&  & X\\ \hline
+\rref{R_Output}                & X&  &  &  &  &  &  \\ \hline
 \end{tabular}
-\caption{Traceability Matrix Showing the Connections Between Requirements and Instance Models}
+\caption{Traceability Matrix Showing the Connections Between Instance Models, Requirements, and Data Constraints}
 \label{Table:R_trace}
 \end{table}
-
-The purpose of the traceability graphs is also to provide easy references on
-what has to be additionally modified if a certain component is changed.  The
-arrows in the graphs represent dependencies. The component at the tail of an
-arrow is depended on by the component at the head of that arrow. Therefore, if a
-component is changed, the components that it points to should also be
-changed. Figure~\ref{Fig_ATrace} shows the dependencies of theoretical models,
-general definitions, data definitions, instance models, likely changes, and
-assumptions on each other. Figure~\ref{Fig_RTrace} shows the dependencies of
-instance models, requirements, and data constraints on each other.
 
 % \begin{figure}[h!]
 % 	\begin{center}
@@ -1305,15 +1119,19 @@ instance models, requirements, and data constraints on each other.
 
 \section{Development Plan}
 
-\plt{This section is optional.  It is used to explain the plan for developing
-  the software.  In particular, this section gives a list of the order in which
-  the requirements will be implemented.  In the context of a course  this is
-  where you can indicate which requirements will be implemented as part of the
-  course, and which will be ``faked'' as future work.  This section can be
-  organized as a prioritized list of requirements, or it could should the
-  requirements that will be implemented for ``phase 1'', ``phase 2'', etc.}
+The software shall be developed using Drasil. Drasil will be used to encode the
+problem knowledge (assumptions, models, and requirements) and to generate the
+software artifacts in a traceable way.
+
+Drasil will also be used to generate and maintain this SRS document. Developers
+should follow the Drasil workflow and documentation, and make changes by updating
+the encoded knowledge in Drasil rather than editing generated artifacts directly.
+
 
 \section{Values of Auxiliary Constants}
+
+\noindent \textbf{Gravitational constant:}
+$G = 6.67430\times 10^{-11}\ \si{\metre^3\per\kilogram\per\second^2}$.
 
 \plt{Show the values of the symbolic parameters introduced in the report.}
 
@@ -1325,60 +1143,6 @@ Their values are defined in this section for easy maintenance.}
 \newpage
 
 \bibliographystyle {plainnat}
-\bibliography {../../refs/References}
-
-\newpage
-
-\noindent \plt{The following is not part of the template, just some things to consider
-  when filing in the template.}
-
-\noindent \plt{Grammar, flow and \LaTeX advice:
-\begin{itemize}
-\item For Mac users \texttt{*.DS\_Store} should be in \texttt{.gitignore}
-\item \LaTeX{} and formatting rules
-\begin{itemize}
-\item Variables are italic, everything else not, includes subscripts (link to
-  document)
-\begin{itemize}
-\item \href{https://physics.nist.gov/cuu/pdf/typefaces.pdf}{Conventions}
-\item Watch out for implied multiplication
-\end{itemize}
-\item Use BibTeX
-\item Use cross-referencing
-\end{itemize}
-\item Grammar and writing rules
-\begin{itemize}
-\item Acronyms expanded on first usage (not just in table of acronyms)
-\item ``In order to'' should be ``to''
-\end{itemize}
-\end{itemize}}
-
-\noindent \plt{Advice on using the template:
-\begin{itemize}
-\item Difference between physical and software constraints
-\item Properties of a correct solution means \emph{additional} properties, not
-  a restating of the requirements (may be ``not applicable'' for your problem).
-  If you have a table of output constraints, then these are properties of a
-  correct solution.
-\item Assumptions have to be invoked somewhere
-\item ``Referenced by'' implies that there is an explicit reference
-\item Think of traceability matrix, list of assumption invocations and list of
-  reference by fields as automatically generatable
-\item If you say the format of the output (plot, table etc), then your
-  requirement could be more abstract
-\end{itemize}
-}
-
-\newpage{}
-\section*{Appendix --- Reflection}
-
-\wss{Not required for CAS 741}
-
-The information in this section will be used to evaluate the team members on the
-graduate attribute of Lifelong Learning.  
-
-\input{../Reflection.text}
-
-\input{../SRS_Reflection.text}
+\bibliography{../../refs/References}
 
 \end{document}
