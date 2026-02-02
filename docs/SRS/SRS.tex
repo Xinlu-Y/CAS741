@@ -148,17 +148,14 @@
 \begin{tabularx}{\textwidth}{p{3cm}p{2cm}X}
 \toprule {\bf Date} & {\bf Version} & {\bf Notes}\\
 \midrule
-Jan. 27, 2026 & 1.0 & Template imported.\\
-Date 2 & 1.1 & Notes\\
+Jan. 27, 2026 & 0.1 & Imported SRS template and set up document structure.\\
+Jan. 28, 2026 & 0.2 & Filled in problem description and core models.\\
+Jan. 29, 2026 & 0.3 & Completed requirements and traceability tables.\\
+Feb. 2, 2026 & 0.4 & Complete rough draft.\\
 \bottomrule
 \end{tabularx}
 
 ~\\
-\plt{This template is intended for use by CAS 741.  For CAS 741 the template
-should be used exactly as given, except the Reflection Appendix can be deleted.
-For the capstone course it is a source of ideas, but shouldn't be followed
-exactly.  The exception is the reflection appendix.  All capstone SRS documents
-should have a reflection appendix.}
 
 ~\newpage
 
@@ -171,8 +168,7 @@ This section records information for easy reference.
 Throughout this document SI (Syst\`{e}me International d'Unit\'{e}s) is employed
 as the unit system.  In addition to the basic units, several derived units are
 used as described below.  For each unit, the symbol is given followed by a
-description of the unit and the SI name.
-~\newline
+description of the unit and the SI name. ~\newline
 
 \renewcommand{\arraystretch}{1.2}
 %\begin{table}[ht]
@@ -214,7 +210,6 @@ $\mathbf{v}_2(t)$ & \si{\metre\per\second} & velocity vector of star 2 at time $
 $\mathbf{a}_1(t)$ & \si{\metre\per\second\squared} & acceleration vector of star 1 at time $t$ \\
 $\mathbf{a}_2(t)$ & \si{\metre\per\second\squared} & acceleration vector of star 2 at time $t$ \\
 $\mathbf{F}_{12}$ & \si{\newton} & gravitational force on star 1 due to star 2 \\
-$t$ & \si{\second} & time \\
 $t_{\text{final}}$ & \si{\second} & end time of the simulation interval \\
 \bottomrule
 \end{longtable*}
@@ -242,8 +237,9 @@ $t_{\text{final}}$ & \si{\second} & end time of the simulation interval \\
 \end{tabular}\\
 
 \subsection{Mathematical Notation}
-Vectors are denoted by bold symbols (e.g., $\mathbf{r}$ and $\mathbf{v}$).
-The Euclidean norm of a vector $\mathbf{x}$ is written as $\lVert \mathbf{x} \rVert$.
+Vectors are denoted by bold symbols (e.g., $\mathbf{r}$ and $\mathbf{v}$). The
+Euclidean norm of a vector $\mathbf{x}$ is written as $\lVert \mathbf{x}
+\rVert$.
 
 \newpage
 \pagenumbering{arabic}
@@ -256,11 +252,11 @@ by each other’s gravity.
 
 Software can be used to simulate how a binary star system evolves over time.
 Such simulations are useful for learning and for analysis. In this document, a
-software artifact that meets these requirements is called Binary Star System Simulator (BSS).
+software artifact that meets these requirements is called Binary Star System
+Simulator (BSS).
 
-This document presents the Software Requirements Specification (SRS) for
-BSS. It explains the purpose of the document and the scope of the
-requirements.
+This document presents the Software Requirements Specification (SRS) for BSS. It
+explains the purpose of the document and the scope of the requirements.
 
 \subsection{Purpose of Document}
 
@@ -275,14 +271,14 @@ methods, programming languages, or tools.
 \subsection{Scope of Requirements} \label{sec_Scope}
 
 The requirements analyze the problem described in Section~\ref{Sec_pd} and the
-related solution described in Section~\ref{sec_instance} under Newtonian gravitation. The
-system is modeled as two point masses in a two-dimensional space, and the
-software computes their motion from given initial conditions over a specified
-time span.
+related solution described in Section~\ref{sec_instance} under Newtonian
+gravitation. The system is modeled as two point masses in a two-dimensional
+space, and the software computes their motion from given initial conditions over
+a specified time span.
 
-The scope excludes effects such as relativity, external bodies, non-gravitational
-forces, and changes in mass. These exclusions keep the problem simple and
-focused on the two-body model.
+The scope excludes effects such as relativity, external bodies, non-
+gravitational forces, and changes in mass. These exclusions keep the problem
+simple and focused on the two-body model.
 
 \subsection{Characteristics of Intended Reader} \label{sec_IntendedReader}
 
@@ -303,19 +299,21 @@ its use.
 
 \subsection{Organization of Document}
 This document follows the SRS template as specified by Smith et al.~\citep{
-SmithAndKoothoor2016, SmithAndLai2005, SmithEtAl2007}. 
-If you are already familiar with the SRS template, the author’s recommended
-reading order is:
+SmithAndKoothoor2016, SmithAndLai2005, SmithEtAl2007}. If you are already
+familiar with the SRS template, the author's recommended reading order is:
 
 \begin{itemize}
   \item \nameref{Sec_pd} (Section~\ref{Sec_pd})
   \item \nameref{sec_GoalStatements} (Section~\ref{sec_GoalStatements})
   \item \nameref{sec_IntendedReader} (Section~\ref{sec_IntendedReader})
   \item \nameref{sec_Scope} (Section~\ref{sec_Scope})
-  \item \nameref{sec_GeneralSystemDescription} (Section~\ref{sec_GeneralSystemDescription})
+  \item \nameref{sec_GeneralSystemDescription}
+    (Section~\ref{sec_GeneralSystemDescription})
   \item \nameref{sec_assumpt} (Section~\ref{sec_assumpt})
-  \item \nameref{sec_SpecificSystemDescription} (Section~\ref{sec_SpecificSystemDescription})
-  \item \nameref{sec_instance} (Section~\ref{sec_instance}) to \nameref{sec_theoretical} (Section~\ref{sec_theoretical})
+  \item \nameref{sec_SpecificSystemDescription}
+    (Section~\ref{sec_SpecificSystemDescription})
+  \item \nameref{sec_instance} (Section~\ref{sec_instance}) to
+    \nameref{sec_theoretical} (Section~\ref{sec_theoretical})
 \end{itemize}
 
 The other material is referential and may be read as needed.
@@ -330,8 +328,8 @@ characteristics and lists the system constraints.
 \subsection{System Context}
 
 Figure~\ref{Fig_SystemContext} shows an abstract view of the Binary Star System
-simulation software. The rectangular node denotes the software, and the
-circular nodes denote external entities.
+simulation software. The rectangular node denotes the software, and the circular
+nodes denote external entities.
 
 The user provides the initial conditions and simulation settings. The software
 computes the evolution of the binary system and returns the resulting star
@@ -349,23 +347,32 @@ governing equations and returns either a solution or an error.
 \begin{itemize}
   \item User Responsibilities:
     \begin{itemize}
-      \item Providing the physical parameters of the binary star system, including stellar masses, initial positions, and initial velocities, taking required units, assumptions, and applicability of the physical model into consideration.
+      \item Providing the physical parameters of the binary star system,
+        including stellar masses, initial positions, and initial velocities,
+        taking required units, assumptions, and applicability of the physical
+        model into consideration.
       \item Providing simulation settings such as time span.
-      \item Interpreting the output of the program in accordance with this SRS document and using an audited and reliable copy of software related to this SRS.
+      \item Interpreting the output of the program in accordance with this SRS
+        document and using an audited and reliable copy of software related to
+        this SRS.
     \end{itemize} 
 \end{itemize}
 \begin{itemize}
   \item BSS Responsibilities:
     \begin{itemize}
-      \item Detecting data type mismatches, such as invalid numerical inputs or inconsistent parameter dimensions.
-      \item Validating the applicability of the input arguments to the physical assumptions and models specified in this document.
-      \item Computing the time evolution of the binary star system under gravitational interaction and producing the corresponding trajectories.
+      \item Detecting data type mismatches, such as invalid numerical inputs or
+        inconsistent parameter dimensions.
+      \item Validating the applicability of the input arguments to the physical
+        assumptions and models specified in this document.
+      \item Computing the time evolution of the binary star system under
+        gravitational interaction and producing the corresponding trajectories.
     \end{itemize} 
 \end{itemize}
 \begin{itemize}
   \item External IVP Solver Responsibilities:
     \begin{itemize}
-      \item Attempting to solve systems of ordinary differential equations formulated as initial value problems on demand.
+      \item Attempting to solve systems of ordinary differential equations
+        formulated as initial value problems on demand.
     \end{itemize}
 \end{itemize}
 
@@ -378,28 +385,29 @@ equivalent to first-year university physics and calculus is sufficient to
 interpret the results and simulate a binary star system under simplified
 conditions.
 
-The author of this document accepts no liability and provides no warranty for any
-usage of the software. The software should be appropriately audited by qualified
-authorities and conform to applicable local laws and regulations.
+The author of this document accepts no liability and provides no warranty for
+any usage of the software. The software should be appropriately audited by
+qualified authorities and conform to applicable local laws and regulations.
 
 \subsection{System Constraints}
 
 The software shall be developed using Drasil to encode the problem and generate
-a binary star system simulation based on an IVP formulation. No additional system constraints are imposed.
+a binary star system simulation based on an IVP formulation. No additional
+system constraints are imposed.
 \newpage
 \section{Specific System Description} \label{sec_SpecificSystemDescription}
 
 This section first presents the problem description, which gives a high-level
-view of the problem to be solved.  This is followed by the solution characteristics
-specification, which presents the assumptions, theories, definitions and finally
-the instance models.
+view of the problem to be solved.  This is followed by the solution
+characteristics specification, which presents the assumptions, theories,
+definitions and finally the instance models.
 
 \subsection{Problem Description} \label{Sec_pd}
 
-BSS is intended to simulate the motion of a binary star system under
-mutual gravitational interaction. Given the physical properties of two stars
-and their initial conditions, the software determines how the positions of the
-stars evolve over time according to a simplified physical model.
+BSS is intended to simulate the motion of a binary star system under mutual
+gravitational interaction. Given the physical properties of two stars and their
+initial conditions, the software determines how the positions of the stars
+evolve over time according to a simplified physical model.
 
 \subsubsection{Terminology and  Definitions}
 
@@ -446,9 +454,9 @@ The physical system is described at an initial time by the positions and
 velocities of the two stars. Motion is considered relative to a fixed inertial
 frame, and distances are measured using a Cartesian coordinate system. The
 center of mass of the system follows inertial motion, while each star orbits
-around the center of mass according to the gravitational interaction.
-The orbit shown in the figure is illustrative only. The actual trajectory
-depends on the initial conditions and is not necessarily elliptical.
+around the center of mass according to the gravitational interaction. The orbit
+shown in the figure is illustrative only. The actual trajectory depends on the
+initial conditions and is not necessarily elliptical.
 
 The physical system examined in this document therefore consists of the
 following components:
@@ -456,7 +464,8 @@ following components:
 \item[PS1:] star 1, modeled as a point mass,
 \item[PS2:] star 2, modeled as a point mass,
 \item[PS3:] the Newtonian gravitational interaction between the two stars, and
-\item[PS4:] an inertial, two-dimensional Cartesian reference frame in which the motion is observed.
+\item[PS4:] an inertial, two-dimensional Cartesian reference frame in which the
+  motion is observed.
 \end{itemize}
 
 No external forces are applied to the system. As a result, the total linear
@@ -478,8 +487,8 @@ initial conditions.
 \begin{itemize}
 
 \item[GS\refstepcounter{goalnum}\thegoalnum \label{G_positionsOverTime}:]
-  Determine the positions of both stars as functions of time over a
-  specified simulation interval.
+Determine the positions of both stars as functions of time over a specified
+simulation interval.
 
 \end{itemize}
 
@@ -501,45 +510,44 @@ change [LC], in which the respective assumption is used.
 \begin{itemize}
 
 \item[A\refstepcounter{assumpnum}\theassumpnum \label{A_twoBody}:]
-  The system consists of exactly two stars; third-body gravitational perturbations
-  are ignored.
+The system consists of exactly two stars; third-body gravitational perturbations
+are ignored.
 
 \item[A\refstepcounter{assumpnum}\theassumpnum \label{A_isolated}:]
-  Non-gravitational forces (e.g., drag, thrust, radiation pressure) are neglected;
-  the only force modeled is mutual gravitation between the two stars.
+Non-gravitational forces (e.g., drag, thrust, radiation pressure) are neglected;
+the only force modeled is mutual gravitation between the two stars.
 
 \item[A\refstepcounter{assumpnum}\theassumpnum \label{A_newtonianGravity}:]
-  The gravitational interaction between the stars is modeled using Newton's law
-  of universal gravitation.
+The gravitational interaction between the stars is modeled using Newton's law of
+universal gravitation.
 
 \item[A\refstepcounter{assumpnum}\theassumpnum \label{A_nonRelativistic}:]
-  The motion is modeled using classical (non-relativistic) mechanics; relativistic
-  effects are neglected.
+The motion is modeled using classical (non-relativistic) mechanics; relativistic
+effects are neglected.
 
 \item[A\refstepcounter{assumpnum}\theassumpnum \label{A_pointMass}:]
-  Each star is modeled as a point mass, and effects due to stellar size,
-  deformation, or rotation are neglected.
+Each star is modeled as a point mass, and effects due to stellar size,
+deformation, or rotation are neglected.
 
 \item[A\refstepcounter{assumpnum}\theassumpnum \label{A_constantMass}:]
-  The masses of the stars remain constant over time.
+The masses of the stars remain constant over time.
 
 \item[A\refstepcounter{assumpnum}\theassumpnum \label{A_inertialFrame}:]
-  The simulation is performed in an inertial reference frame.
+The simulation is performed in an inertial reference frame.
 
 \item[A\refstepcounter{assumpnum}\theassumpnum \label{A_planar}:]
-  The motion of the binary star system is confined to a two-dimensional plane.
+The motion of the binary star system is confined to a two-dimensional plane.
 
 \item[A\refstepcounter{assumpnum}\theassumpnum \label{A_nonzeroSeparation}:]
-  Collisions are out of scope: the separation distance satisfies
-  $r_{12}(t) > 0$ for all simulated times (\dref{GD:RelPosSep}),
-  so the gravitational force model remains well-defined.
+Collisions are out of scope: the separation distance satisfies $r_{12}(t) > 0$
+for all simulated times (\dref{GD:RelPosSep}), so the gravitational force model
+remains well-defined.
 
 \end{itemize}
 
 \subsubsection{Theoretical Models}\label{sec_theoretical}
 
-This section focuses on the general equations and laws that BSS is based
-on.
+This section focuses on the general equations and laws that BSS is based on.
 ~\newline
 
 \noindent
@@ -549,20 +557,14 @@ on.
 % #3 label
 {Center-of-Mass Reference Frame}
 % #4 equation
-{
-  $\mathbf{R} = \dfrac{m_1 \mathbf{r}_1 + m_2 \mathbf{r}_2}{m_1 + m_2}$
-}
+{ $\mathbf{R} = \dfrac{m_1 \mathbf{r}_1 + m_2 \mathbf{r}_2}{m_1 + m_2}$ }
 % #5 description
-{
-  The above equation defines the center-of-mass (COM) position $\mathbf{R}$ of a
-  two-body system, where $m_1$ and $m_2$ are the masses of the two stars and
-  $\mathbf{r}_1$ and $\mathbf{r}_2$ are their position vectors.
-  In the COM reference frame, the origin is chosen such that $\mathbf{R}=\mathbf{0}$.
-}
+{ The above equation defines the center-of-mass (COM) position $\mathbf{R}$ of a
+two-body system, where $m_1$ and $m_2$ are the masses of the two stars and
+$\mathbf{r}_1$ and $\mathbf{r}_2$ are their position vectors. In the COM
+reference frame, the origin is chosen such that $\mathbf{R}=\mathbf{0}$. }
 % #6 Notes
-{
-None.
-}
+{ None. }
 % #7 Source
 {
   \citep{Taylor2005}
@@ -572,107 +574,56 @@ None.
   \iref{IM:Orbit}
 }
 % #9 Preconditions
-{
-None.
-}
+{ None. }
 % #1 derivation - not applicable by default
 {}
 \noindent
 \deftheory
-{TM2}
-{Kinematics: Position, Velocity, and Acceleration}
-{
-  $\mathbf{v}(t) = \dfrac{d\mathbf{r}(t)}{dt}$,
+{TM2} {Kinematics: Position, Velocity, and Acceleration} { $\mathbf{v}(t) =
+\dfrac{d\mathbf{r}(t)}{dt}$,
   \quad
-  $\mathbf{a}(t) = \dfrac{d\mathbf{v}(t)}{dt} = \dfrac{d^2\mathbf{r}(t)}{dt^2}$
-}
-{
-  This model defines velocity $\mathbf{v}(t)$ and acceleration $\mathbf{a}(t)$ as
-  time derivatives of the position vector $\mathbf{r}(t)$.
-}
-{
-None.
-}
-{
+$\mathbf{a}(t) = \dfrac{d\mathbf{v}(t)}{dt} = \dfrac{d^2\mathbf{r}(t)}{dt^2}$ }
+{ This model defines velocity $\mathbf{v}(t)$ and acceleration $\mathbf{a}(t)$
+as time derivatives of the position vector $\mathbf{r}(t)$. } { None. } {
   \citep{Taylor2005}
-}
-{
+} {
   \iref{IM:Orbit}
-}
-{
-None.
-}
-{}
+} { None. } {}
 \noindent
 \deftheory
-{TM3}
-{Newton's Law of Universal Gravitation}
-{
-  $\mathbf{F}_{12} = - G \frac{m_1 m_2}{r_{12}^3}\,\mathbf{r}_{12}$,
-  where $\mathbf{r}_{12}=\mathbf{r}_{12}(t)$ and $r_{12}=r_{12}(t)$
-  (\dref{GD:RelPosSep}).
-}
-{
-  The above equation gives the gravitational force exerted between two stars of
-  masses $m_1$ and $m_2$. The force is proportional to the product of the masses
-  and inversely proportional to the square of the distance between them, acting
-  along the line joining their positions.
-}
-{
-None.
-}
-{
+{TM3} {Newton's Law of Universal Gravitation} { $\mathbf{F}_{12} = - G \frac{m_1
+m_2}{r_{12}^3}\,\mathbf{r}_{12}$, where $\mathbf{r}_{12}=\mathbf{r}_{12}(t)$ and
+$r_{12}=r_{12}(t)$ (\dref{GD:RelPosSep}). } { The above equation gives the
+gravitational force exerted between two stars of masses $m_1$ and $m_2$. The
+force is proportional to the product of the masses and inversely proportional to
+the square of the distance between them, acting along the line joining their
+positions. } { None. } {
   \citep{Taylor2005}
-}
-{
+} {
   \tref{TM4}
-}
-{
-None.
-}
-{}
+} { None. } {}
 \noindent
 \deftheory
-{TM4}
-{Equations of Motion for a Two-Body System}
-{
-  $m_1 \mathbf{a}_1 = \mathbf{F}_{12},
+{TM4} {Equations of Motion for a Two-Body System} { $m_1 \mathbf{a}_1 =
+\mathbf{F}_{12},
   \quad
-  m_2 \mathbf{a}_2 = -\mathbf{F}_{12}$
-}
-{
-  This model relates the motion of each star to the gravitational force acting
-  on it according to Newton's second law of motion. Together with
+m_2 \mathbf{a}_2 = -\mathbf{F}_{12}$ } { This model relates the motion of each
+star to the gravitational force acting on it according to Newton's second law of
+motion. Together with
   \tref{TM3}, these equations govern the dynamics of the binary star system.
-}
-{
-None.
-}
-{
+} { None. } {
   \citep{Taylor2005}
-}
-{
+} {
   \iref{IM:Orbit}
-}
-{
-None.
-}
-{}
+} { None. } {}
 
-\plt{``Ref.\ By'' is used repeatedly with the different types of information.
-  This stands for Referenced By.  It means that the models, definitions and
-  assumptions listed reference the current model, definition or assumption.
-  This information is given for traceability.  Ref. By provides a pointer in the
-  opposite direction to what we commonly do.  You still need to have a reference
-  in the other direction pointing to the current model, definition or
-  assumption.  As an example, if TM1 is referenced by GD2, that means that GD2 will
-  explicitly include a reference to TM1.}
 
 ~\newline
 
 \subsubsection{General Definitions}\label{sec_gendef}
 
-This section collects the laws and equations that will be used in building the instance models.
+This section collects the laws and equations that will be used in building the
+instance models.
 
 ~\newline
 
@@ -734,7 +685,7 @@ Description &
 $G$ is the universal gravitational constant used in Newton's law of gravitation.
 \\
 \hline
-Sources& \citep[p.~033105-41]{CODATA2018}\\
+Sources& \citep{CODATA2018}\\
 \hline
 Ref.\ By & \tref{TM3}, \tref{TM4}, \iref{IM:Orbit}\\
 \hline
@@ -742,20 +693,16 @@ Ref.\ By & \tref{TM3}, \tref{TM4}, \iref{IM:Orbit}\\
 \end{minipage}\\
 
 \subsubsection{Data Types}\label{sec_datatypes}
-The conventional data types used in undergraduate-level physics courses is sufficient. As such, the specifications define no extra data types.\\
+The conventional data types used in undergraduate-level physics courses is
+sufficient. As such, the specifications define no extra data types.\\
 
-\subsubsection{Instance Models} \label{sec_instance}    
+\subsubsection{Instance Models} \label{sec_instance}
 
-\plt{The motivation for this section is to reduce the problem defined in
-  ``Physical System Description'' (Section~\ref{sec_phySystDescrip}) to one
-  expressed in mathematical terms. The IMs are built by refining the TMs and/or
-  GDs.  This section should remain abstract.  The SRS should specify the
-  requirements without considering the implementation.}
-
-This section transforms the problem defined in Section~\ref{Sec_pd} into 
-one which is expressed in mathematical terms. It uses concrete symbols defined 
-in Section~\ref{sec_datadef} to replace the abstract symbols in the models 
-identified in Sections~\ref{sec_theoretical} and~\ref{sec_gendef}. The goals \gsref{G_positionsOverTime} is solved by \iref{IM:Orbit}.
+This section transforms the problem defined in Section~\ref{Sec_pd} into one
+which is expressed in mathematical terms. It uses concrete symbols defined in
+Section~\ref{sec_datadef} to replace the abstract symbols in the models
+identified in Sections~\ref{sec_theoretical} and~\ref{sec_gendef}. The goals
+\gsref{G_positionsOverTime} is solved by \iref{IM:Orbit}.
 
 ~\newline
 
@@ -819,23 +766,25 @@ identified in Sections~\ref{sec_theoretical} and~\ref{sec_gendef}. The goals \gs
 
 \subsubsection*{Derivation of Binary Star Orbital Motion}
 
-This model is a direct instantiation of \tref{TM3} and \tref{TM4} as an IVP for a
-two-body system (\aref{A_twoBody}) in a planar setting (\aref{A_planar}). It
-assumes Newtonian gravitation (\aref{A_newtonianGravity}) and classical mechanics
-(\aref{A_nonRelativistic}), with point-mass stars (\aref{A_pointMass}) of constant
-masses (\aref{A_constantMass}), in an inertial frame (\aref{A_inertialFrame}), and
-neglects non-gravitational forces (\aref{A_isolated}). The relative position and
-separation are defined by \dref{GD:RelPosSep}.
+This model is a direct instantiation of \tref{TM3} and \tref{TM4} as an IVP for
+a two-body system (\aref{A_twoBody}) in a planar setting (\aref{A_planar}). It
+assumes Newtonian gravitation (\aref{A_newtonianGravity}) and classical
+mechanics (\aref{A_nonRelativistic}), with point-mass stars (\aref{A_pointMass})
+of constant masses (\aref{A_constantMass}), in an inertial frame
+(\aref{A_inertialFrame}), and neglects non-gravitational forces
+(\aref{A_isolated}). The relative position and separation are defined by
+\dref{GD:RelPosSep}.
 
 \subsubsection{Input Data Constraints} \label{sec_DataConstraints}    
 
 Table~\ref{TblInputVar} lists the constraints on the input variables for BSS.
 Physical constraints capture non-negotiable requirements (for example, positive
 mass). Software constraints restrict inputs to ranges that are expected to be
-numerically reasonable for the intended use of this simulator (Section~\ref{sec_Scope}).
+numerically reasonable for the intended use of this simulator
+(Section~\ref{sec_Scope}).
 
-The specification parameters referenced in the software constraints are listed in
-Table~\ref{TblSpecParams}.
+The specification parameters referenced in the software constraints are listed
+in Table~\ref{TblSpecParams}.
 
 \begin{table}[!h]
   \caption{Input Variables} \label{TblInputVar}
@@ -882,7 +831,8 @@ positions must satisfy $m_1\mathbf{r}_1(0)+m_2\mathbf{r}_2(0)=\mathbf{0}$.
 \subsubsection{Properties of a Correct Solution} \label{sec_CorrectSolution}
 
 \noindent
-A correct solution must exhibit with the limitations as defined in Table~\ref{TblOutputVar}.
+A correct solution must exhibit with the limitations as defined in
+Table~\ref{TblOutputVar}.
 
 \begin{table}[!h]
 \caption{Output Variables} \label{TblOutputVar}
@@ -899,8 +849,6 @@ A correct solution must exhibit with the limitations as defined in Table~\ref{Tb
 
 \section{Requirements}
 
-\plt{The requirements refine the goal statement.  They will make heavy use of
-  references to the instance models.}
 
 This section provides the functional requirements, the business tasks that the
 software is expected to complete, and the nonfunctional requirements, the
@@ -910,13 +858,16 @@ qualities that the software is expected to exhibit.
 
 \noindent \begin{itemize}
 
-\item[R\refstepcounter{reqnum}\thereqnum \label{R_Inputs}:] The inputs shall be provided by the end user according to the data definitions
+\item[R\refstepcounter{reqnum}\thereqnum \label{R_Inputs}:] The inputs shall be
+  provided by the end user according to the data definitions
 specified in Table~\ref{TblInputVar}.
 
-\item[R\refstepcounter{reqnum}\thereqnum \label{R_OutputInputs}:] The inputs of BSS shall be displayed to the user before any meaningful
+\item[R\refstepcounter{reqnum}\thereqnum \label{R_OutputInputs}:] The inputs of
+  BSS shall be displayed to the user before any meaningful
 computation begins.
 
-\item[R\refstepcounter{reqnum}\thereqnum \label{R_Calculate}:] The provided inputs shall be validated against the constraints specified in
+\item[R\refstepcounter{reqnum}\thereqnum \label{R_Calculate}:] The provided
+  inputs shall be validated against the constraints specified in
 Table~\ref{TblInputVar}.
 
 \item[R\refstepcounter{reqnum}\thereqnum \label{R_VerifyOutput}:]
@@ -925,32 +876,15 @@ conditions defined by the instance models in Section~\ref{sec_instance}.
 
 \item[R\refstepcounter{reqnum}\thereqnum \label{R_Output}:]
 The software shall compute and output the system state variables specified in
-Table~\ref{TblOutputVar} in accordance with the instance models described in Section~\ref{sec_instance}.
+Table~\ref{TblOutputVar} in accordance with the instance models described in
+Section~\ref{sec_instance}.
 
 
 \end{itemize}
 
-\plt{Every IM should map to at least one requirement, but not every requirement
-  has to map to a corresponding IM.}
 
 \subsection{Nonfunctional Requirements}
 
-\plt{List your nonfunctional requirements.  You may consider using a fit
-  criterion to make them verifiable.}
-\plt{The goal is for the nonfunctional requirements to be unambiguous, abstract
-  and verifiable.  This isn't easy to show succinctly, so a good strategy may be
-to give a ``high level'' view of the requirement, but allow for the details to
-be covered in the Verification and Validation document.}
-\plt{An absolute requirement on a quality of the system is rarely needed.  For
-  instance, an accuracy of 0.0101 \% is likely fine, even if the requirement is
-  for 0.01 \% accuracy.  Therefore, the emphasis will often be more on
-  describing now well the quality is achieved, through experimentation, and
-  possibly theory, rather than meeting some bar that was defined a priori.}
-\plt{You do not need an entry for correctness in your NFRs.  The purpose of the
-  SRS is to record the requirements that need to be satisfied for correctness.
-  Any statement of correctness would just be redundant. Rather than discuss
-  correctness, you can characterize how far away from the correct (true)
-  solution you are allowed to be.  This is discussed under accuracy.}
 
 \noindent \begin{itemize}
 
@@ -960,11 +894,12 @@ intended scientific and educational usage domain. Confidence in the accuracy of
 the software shall be established by following the procedures outlined in the
 Verification and Validation Plan.
 
-\item[NFR\refstepcounter{nfrnum}\thenfrnum \label{NFR_Usability}:] \textbf{Usability}
-  The outputs of BSS should be easy to inspect and reuse. In particular,
-the software should export results in a consistent format so that users can
-post-process and visualize trajectories with external tools. The usability of
-the software will be discussed and evaluated following the procedure in the
+\item[NFR\refstepcounter{nfrnum}\thenfrnum \label{NFR_Usability}:] \textbf{Usabi
+  lity}
+The outputs of BSS should be easy to inspect and reuse. In particular, the
+software should export results in a consistent format so that users can post-
+process and visualize trajectories with external tools. The usability of the
+software will be discussed and evaluated following the procedure in the
 Verification and Validation Plan.
 
 \item[NFR\refstepcounter{nfrnum}\thenfrnum \label{NFR_Maintainability}:]
@@ -989,10 +924,9 @@ complexity.
 
 The modeling choices and assumptions are based on standard practices in
 introductory classical mechanics. Newtonian gravitation is used because it is
-sufficient for describing the intended class of systems and is widely
-understood by the intended readers. Additional effects such as relativistic
-corrections and external forces are excluded to maintain focus on the core
-problem.
+sufficient for describing the intended class of systems and is widely understood
+by the intended readers. Additional effects such as relativistic corrections and
+external forces are excluded to maintain focus on the core problem.
 
 Typical values and representations are chosen to support clarity, consistency,
 and ease of verification. The use of Drasil motivates explicit and structured
@@ -1005,7 +939,8 @@ artifacts.
 
 \noindent \begin{itemize}
 
-\item[LC\refstepcounter{lcnum}\thelcnum\label{LC_meaningfulLabel}:] Additional derived output quantities, such as total energy
+\item[LC\refstepcounter{lcnum}\thelcnum\label{LC_derivedOutputs}:] Additional
+  derived output quantities, such as total energy
 or angular momentum, may be added to support validation and analysis of the
 simulation results.
 \end{itemize}
@@ -1019,22 +954,16 @@ There are no unlikely changes.
 The purpose of the traceability matrices is to provide easy references on what
 has to be additionally modified if a certain component is changed.  Every time a
 component is changed, the items in the column of that component that are marked
-with an ``X'' may have to be modified as well.  Table~\ref{Table:trace} shows the
-dependencies of theoretical models, general definitions, data definitions, and
-instance models with each other. Table~\ref{Table:R_trace} shows the
+with an ``X'' may have to be modified as well.  Table~\ref{Table:trace} shows
+the dependencies of theoretical models, general definitions, data definitions,
+and instance models with each other. Table~\ref{Table:R_trace} shows the
 dependencies of instance models, requirements, and data constraints on each
 other. Table~\ref{Table:A_trace} shows the dependencies of theoretical models,
 general definitions, data definitions, instance models, and likely changes on
 the assumptions.
 
-\plt{You will have to modify these tables for your problem.}
 
-\plt{The traceability matrix is not generally symmetric.  If GD1 uses A1, that
-  means that GD1's derivation or presentation requires invocation of A1.  A1
-  does not use GD1.  A1 is ``used by'' GD1.}
 
-\plt{The traceability matrix is challenging to maintain manually.  Please do
-  your best.  In the future tools (like Drasil) will make this much easier.}
 
 \afterpage{
 \begin{landscape}
@@ -1052,7 +981,7 @@ the assumptions.
 \ddref{DD:G}          & & & & & & & & & \\ \hline
 \iref{IM:Orbit}       & X& X& X& X& X& X& X& X& X\\
 \hline
-\lcref{LC_meaningfulLabel} & X& X& X& X& X& X& X& X& X\\
+\lcref{LC_derivedOutputs} & X& X& X& X& X& X& X& X& X\\
 \hline
 \end{tabular}
 \caption{Traceability Matrix Showing the Connections Between Assumptions and Other Items}
@@ -1092,30 +1021,9 @@ the assumptions.
 \rref{R_VerifyOutput}          & X&  &  &  & X&  & X\\ \hline
 \rref{R_Output}                & X&  &  &  &  &  &  \\ \hline
 \end{tabular}
-\caption{Traceability Matrix Showing the Connections Between Instance Models, Requirements, and Data Constraints}
+\caption{Traceability Matrix Showing the Connections Between Requirements and Instance Models}
 \label{Table:R_trace}
 \end{table}
-
-% \begin{figure}[h!]
-% 	\begin{center}
-% 		%\rotatebox{-90}
-% 		{
-% 			\includegraphics[width=\textwidth]{ATrace.png}
-% 		}
-% 		\caption{\label{Fig_ATrace} Traceability Matrix Showing the Connections Between Items of Different Sections}
-% 	\end{center}
-% \end{figure}
-
-
-% \begin{figure}[h!]
-% 	\begin{center}
-% 		%\rotatebox{-90}
-% 		{
-% 			\includegraphics[width=0.7\textwidth]{RTrace.png}
-% 		}
-% 		\caption{\label{Fig_RTrace} Traceability Matrix Showing the Connections Between Requirements, Instance Models, and Data Constraints}
-% 	\end{center}
-% \end{figure}
 
 \section{Development Plan}
 
@@ -1124,8 +1032,9 @@ problem knowledge (assumptions, models, and requirements) and to generate the
 software artifacts in a traceable way.
 
 Drasil will also be used to generate and maintain this SRS document. Developers
-should follow the Drasil workflow and documentation, and make changes by updating
-the encoded knowledge in Drasil rather than editing generated artifacts directly.
+should follow the Drasil workflow and documentation, and make changes by
+updating the encoded knowledge in Drasil rather than editing generated artifacts
+directly.
 
 
 \section{Values of Auxiliary Constants}
@@ -1133,12 +1042,8 @@ the encoded knowledge in Drasil rather than editing generated artifacts directly
 \noindent \textbf{Gravitational constant:}
 $G = 6.67430\times 10^{-11}\ \si{\metre^3\per\kilogram\per\second^2}$.
 
-\plt{Show the values of the symbolic parameters introduced in the report.}
 
-\plt{The definition of the requirements will likely call for SYMBOLIC\_CONSTANTS.
-Their values are defined in this section for easy maintenance.}
 
-\plt{The value of FRACTION, for the Maintainability NFR would be given here.}
 
 \newpage
 
