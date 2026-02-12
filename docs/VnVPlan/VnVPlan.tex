@@ -2,6 +2,10 @@
 
 \usepackage{booktabs}
 \usepackage{tabularx}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{siunitx}
+\usepackage{pdflscape}
 \usepackage{hyperref}
 \hypersetup{
     colorlinks,
@@ -10,15 +14,15 @@
     linkcolor=red,
     urlcolor=blue
 }
-\usepackage[round]{natbib}
+\usepackage[numbers,square]{natbib}
 
 \input{../Comments.text}
 \input{../Common.text}
 
 \begin{document}
 
-\title{System Verification and Validation Plan for \progname{}} 
-\author{\authname}
+\title{System Verification and Validation Plan for Binary Star System Simulator} 
+\author{Xinlu Yan}
 \date{\today}
 	
 \maketitle
@@ -30,451 +34,489 @@
 \begin{tabularx}{\textwidth}{p{3cm}p{2cm}X}
 \toprule {\bf Date} & {\bf Version} & {\bf Notes}\\
 \midrule
-Date 1 & 1.0 & Notes\\
-Date 2 & 1.1 & Notes\\
+Feb. 5 & 0.0 & Initialized the VnVPlan from the course template.\\
+Feb. 5 & 0.1 & Completed first pass cleanup and filled straightforward sections.\\
+Feb. 5 & 0.2 & Added core project context and objectives in General Information.\\
+Feb. 6 & 0.3 & Drafted team roles and verification workflow in the Plan section.\\
+Feb. 6 & 0.4 & Added initial functional test set and traceability mapping.\\
+Feb. 7 & 0.5 & Refined test criteria, tolerances, and wording.\\
+Feb. 12 & 0.6 & Consolidated sections into a submission-ready draft.\\
 \bottomrule
 \end{tabularx}
-
-~\\
-\wss{The intention of the VnV plan is to increase confidence in the software.
-However, this does not mean listing every verification and validation technique
-that has ever been devised.  The VnV plan should also be a \textbf{feasible}
-plan. Execution of the plan should be possible with the time and team available.
-If the full plan cannot be completed during the time available, it can either be
-modified to ``fake it'', or a better solution is to add a section describing
-what work has been completed and what work is still planned for the future.}
-
-\wss{The VnV plan is typically started after the requirements stage, but before
-the design stage.  This means that the sections related to unit testing cannot
-initially be completed.  The sections will be filled in after the design stage
-is complete.  the final version of the VnV plan should have all sections filled
-in.}
 
 \newpage
 
 \tableofcontents
 
-\listoftables
-\wss{Remove this section if it isn't needed}
+\newpage
 
-\listoffigures
-\wss{Remove this section if it isn't needed}
+\listoftables
 
 \newpage
 
 \section{Symbols, Abbreviations, and Acronyms}
 
 \renewcommand{\arraystretch}{1.2}
-\begin{tabular}{l l} 
-  \toprule		
-  \textbf{symbol} & \textbf{description}\\
-  \midrule 
-  T & Test\\
-  \bottomrule
-\end{tabular}\\
-
-\wss{symbols, abbreviations, or acronyms --- you can simply reference the SRS
-  \citep{SRS} tables, if appropriate}
-
-\wss{Remove this section if it isn't needed}
+\begin{tabularx}{\textwidth}{l X}
+  \toprule
+  \textbf{Symbol / Acronym} & \textbf{Description}\\
+  \midrule
+  BSS & Binary Star System Simulator.\\
+  SRS & Software Requirements Specification.\\
+  VnV & Verification and Validation.\\
+  PoC & Proof of Concept implementation used for comparison and sanity checks.\\
+  IM & Instance Model as defined in the SRS.\\
+  R\# & Requirement identifier from the SRS (for example, R1--R5).\\
+  COM & Center of Mass.\\
+  IVP & Initial Value Problem.\\
+   \bottomrule
+\end{tabularx}
 
 \newpage
 
 \pagenumbering{arabic}
 
-This document ... \wss{provide an introductory blurb and roadmap of the
-  Verification and Validation plan}
 
 \section{General Information}
 
+This document presents the verification and validation (VnV) strategy for the
+Binary Star System Simulator (BSS). It explains how we will evaluate the Binary
+Star System SRS \cite{SRS} for clarity, completeness, and internal consistency, and how we
+will collect evidence that an implementation, especially a Drasil generated one,
+behaves in accordance with the specification. The plan focuses on activities
+that are feasible within the course timeline while still providing meaningful
+confidence in the correctness of the model, constraints, and outputs.
+
 \subsection{Summary}
 
-\wss{Say what software is being tested.  Give its name and a brief overview of
-  its general functions.}
+The BSS SRS \cite{SRS} specifies a simulator for a two-body (binary star) system under
+Newtonian gravity in a two-dimensional inertial frame. Users provide masses and
+initial conditions for both bodies, along with a final time. The simulator then
+solves the associated initial value problem and reports the time evolution of
+both positions over the requested interval. The SRS also defines assumptions,
+input constraints (including center-of-mass consistency), and expected output
+structure intended for inspection and educational use.
 
 \subsection{Objectives}
 
-\wss{State what is intended to be accomplished.  The objective will be around
-  the qualities that are most important for your project.  You might have
-  something like: ``build confidence in the software correctness,''
-  ``demonstrate adequate usability.'' etc.  You won't list all of the qualities,
-  just those that are most important.}
+The objectives of this VnV plan are to define an actionable process to:
 
-\wss{You should also list the objectives that are out of scope.  You don't have 
-the resources to do everything, so what will you be leaving out.  For instance, 
-if you are not going to verify the quality of usability, state this.  It is also 
-worthwhile to justify why the objectives are left out.}
+\begin{enumerate}
+  \item assess the BSS SRS \cite{SRS} for logical coherence and traceable structure
+  (goals $\rightarrow$ requirements $\rightarrow$ models/tests),
+  \item justify that the specified assumptions, inputs, and outputs are suitable
+  for the intended educational purpose, and
+  \item verify that a conforming implementation satisfies the SRS through a
+  combination of automated tests, reference checks (analytic or high-precision),
+  and review-based inspection of the Drasil encoding and generated artifacts.
+\end{enumerate}
 
-\wss{The objectives are important because they highlight that you are aware of 
-limitations in your resources for verification and validation.  You can't do everything, 
-so what are you going to prioritize?  As an example, if your system depends on an 
-external library, you can explicitly state that you will assume that external library 
-has already been verified by its implementation team.}
+Successful execution of this plan should provide confidence that the
+specification is usable and that the produced software is both consistent with
+the stated physics model and reliable within the defined scope.
 
 \subsection{Extras}
 
-\wss{Summarize the extras (if any) that were tackled by this project.  Extras
-can include usability testing, code walkthroughs, user documentation, formal
-proof, GenderMag personas, Design Thinking, etc.  Extras should have already
-been approved by the course instructor as included in your problem statement.
-You can use a pull request to update your extras (in TeamComposition.csv or
-Repos.csv) if your plan changes as a result of the VnV planning exercise.}
+No additional extras.
 
 \subsection{Relevant Documentation}
 
-\wss{Reference relevant documentation.  This will definitely include your SRS
-  and your other project documents (design documents, like MG, MIS, etc).  You
-  can include these even before they are written, since by the time the project
-  is done, they will be written.  You can create BibTeX entries for your
-  documents and within those entries include a hyperlink to the documents.}
+Because the software will be generated via Drasil, the primary documentation we
+rely on is the material written by hand, specifically:
+\begin{enumerate}
+  \item the SRS \cite{SRS}, and
+  \item this VnV Plan (and the future VnV Report).
+\end{enumerate}
 
-\citet{SRS}
+Once the BSS case study is encoded in Drasil, that encoding itself can be treated
+as an additional form of documentation. If Drasil produces a solution program,
+any accompanying generated documentation will also be relevant to VnV.
 
-\wss{Don't just list the other documents.  You should explain why they are relevant and 
-how they relate to your VnV efforts.}
+\newpage
 
 \section{Plan}
 
-\wss{Introduce this section.  You can provide a roadmap of the sections to
-  come.}
+This section outlines the planned verification and validation activities,
+including who is responsible, how the SRS and design will be reviewed, how the
+implementation will be checked, and which tools will be used.
 
 \subsection{Verification and Validation Team}
 
-\wss{Your teammates.  Maybe your supervisor.
-  You should do more than list names.  You should say what each person's role is
-  for the project's verification.  A table is a good way to summarize this information.}
+The VnV effort will be led by the document author, with reviews from the course
+instructor and classmates. Table~\ref{tab:vnv-roles} summarizes the planned
+roles.
 
-\subsection{SRS Verification}
+\begin{table}[h!]
+\centering
+\begin{tabularx}{\textwidth}{p{3.5cm}p{3.5cm}X}
+\toprule
+\textbf{Assignee} & \textbf{Role} & \textbf{Responsibilities} \\
+\midrule
+Xinlu Yan & Author / Verifier & Drafts documents, encodes the SRS in Drasil,
+builds tests, and checks traceability. \\
+Dr. Spencer Smith & Supervisor / Reviewer & Provides feedback on correctness,
+scope, and feasibility; reviews the SRS and VnV artifacts. \\
+Joe Zhang & Domain Expert & Reviewer with considerable knowledge on underlying
+domains. \\
+CAS 741 Classmates & Reviewer & Peer review of SRS and VnV Plan using checklists
+and issue tracking. \\
+\bottomrule
+\end{tabularx}
+\caption{Verification and Validation Roles}
+\label{tab:vnv-roles}
+\end{table}
 
-\wss{List any approaches you intend to use for SRS verification.  This may
-  include ad hoc feedback from reviewers, like your classmates (like your
-  primary reviewer), or you may plan for something more rigorous/systematic.}
+\subsection{SRS Verification}\label{SRSVerification}
 
-\wss{If you have a supervisor for the project, you shouldn't just say they will
-read over the SRS.  You should explain your structured approach to the review.
-Will you have a meeting?  What will you present?  What questions will you ask?
-Will you give them instructions for a task-based inspection?  Will you use your
-issue tracker?}
-
-\wss{Maybe create an SRS checklist?}
+Besides the course checklist, we will verify the SRS through:
+\begin{enumerate}
+  \item a structured review by classmates and the supervisor,
+  \item presentation feedback from the course audience,
+  \item consistency checks while encoding the SRS in Drasil, and
+  \item issue tracking for all review findings until closure.
+\end{enumerate}
+The focus is internal consistency, complete coverage of inputs and outputs,
+alignment with the physics model, and clear traceability from goals to
+requirements and instance models. External certification for non-educational
+use is out of scope.
 
 \subsection{Design Verification}
 
-\wss{Plans for design verification}
-
-\wss{The review will include reviews by your classmates}
-
-\wss{Create a checklists?}
-
+Since the implementation is generated through Drasil, the high-level design is
+largely determined by Drasil's existing generation pipeline. The design review
+will therefore target BSS-specific concerns: whether the generated components
+reflect the structure implied by the SRS, whether the exposed interfaces are
+sufficient and correctly constrained, and whether the artifact organization
+supports the execution of the planned tests. Any defect that prevents
+traceability, conformance, or test execution will be addressed before proceeding
+to implementation verification.
 \subsection{Verification and Validation Plan Verification}
 
-\wss{The verification and validation plan is an artifact that should also be
-verified.  Techniques for this include review and mutation testing.}
+The VnV plan itself is subject to review by classmates and the supervisor.
+Reviewers apply the VnV checklist to assess feasibility, coverage, and
+presentation quality. Changes resulting from review are documented in the issue
+log. The plan is considered complete only when it is executable within the
+course scope and timeline.
 
-\wss{The review will include reviews by your classmates}
+\subsection{Implementation Verification Plan}
 
-\wss{Create a checklists?}
+This section describes how we will gain confidence that the
+\textit{Drasil-generated} BSS implementation matches the validated SRS.
 
-\subsection{Implementation Verification}
+\textbf{Idea.}
+BSS will be implemented in two ways:
+(1) a small hand-written proof-of-concept (PoC), and
+(2) a Drasil-generated implementation obtained by encoding the SRS in Drasil.
+The PoC serves as a reference baseline.
 
-\wss{You should at least point to the tests listed in this document and the unit
-  testing plan.}
+\textbf{Step 1: Build and test a PoC.}
+We will implement IM1 from the SRS directly in a small Python program and test it
+manually. This PoC is used only as a reference implementation.
 
-\wss{In this section you would also give any details of any plans for static
-  verification of the implementation.  Potential techniques include code
-  walkthroughs, code inspection, static analyzers, etc.}
+\textbf{Step 2: Generate BSS from Drasil.}
+After the SRS has been reviewed (Section~\ref{SRSVerification}), we will encode the same
+SRS knowledge in Drasil and generate the BSS
+software artifacts.
 
-\wss{The final class presentation in CAS 741 could be used as a code
-walkthrough.  There is also a possibility of using the final presentation (in
-CAS741) for a partial usability survey.}
+\textbf{Step 3: Compare generated artifacts with the PoC.}
+For identical inputs, we will compare the outputs of the generated program
+against the PoC outputs within an acceptable tolerance. The purpose is to
+detect any nontrivial or significant differences (beyond expected numerical
+solver variation).
 
+\textbf{Step 4: Run system tests on the generated implementation.}
+The system tests defined in Section~\ref{SystemTests} are executed on the
+generated implementation to check that the program satisfies IM1 and the input
+constraints.
+
+\textbf{Step 5: Review the Drasil encoding and generator configuration.}
+Since Drasil generates code from the encoded knowledge base, reviewing the
+encoding is effectively reviewing the ``input'' to code generation. Reviewers
+will check that the encoding accurately represents the original SRS and that
+the generator configuration meets project requirements, including:
+\begin{enumerate}
+  \item generating Python code,
+  \item generating modular artifacts (separating validation, model, solver),
+  \item generating documentation/comments from the same knowledge base, and
+  \item providing reproducible run support (e.g., a Makefile or run script).
+\end{enumerate}
+
+\textbf{Step 6: Code walkthrough.}
+A walkthrough will be conducted to explain the overall program flow and to
+trace how major generated components correspond to SRS elements (especially IM1),
+including input validation and the numerical integration interface.
+
+Together, these activities provide confidence that the generated BSS
+implementation faithfully realizes the validated SRS.
 \subsection{Automated Testing and Verification Tools}
 
-\wss{What tools are you using for automated testing.  Likely a unit testing
-  framework and maybe a profiling tool, like ValGrind.  Other possible tools
-  include a static analyzer, make, continuous integration tools, test coverage
-  tools, etc.  Explain your plans for summarizing code coverage metrics.
-  Linters are another important class of tools.  For the programming language
-  you select, you should look at the available linters.  There may also be tools
-  that verify that coding standards have been respected, like flake9 for
-  Python.}
-
-\wss{If you have already done this in the development plan, you can point to
-that document.}
-
-\wss{The details of this section will likely evolve as you get closer to the
-  implementation.}
+Testing is automated using a Python-based test suite executed with \texttt{pytest}.
+All tests are run locally during development and re-run automatically in a
+continuous integration (CI) workflow on each change to the Drasil encoding or
+generated artifacts. To support consistent code quality, the codebase is also
+subjected to lightweight static checks (e.g., formatting and linting). The
+resulting CI reports, test outputs, and coverage summaries form the primary
+evidence that the test procedures were executed and that the implementation
+continues to satisfy the expected behaviors.
 
 \subsection{Software Validation}
 
-\wss{If there is any external data that can be used for validation, you should
-  point to it here.  If there are no plans for validation, you should state that
-  here.}
+Validation assesses whether BSS produces physically meaningful trajectories for
+its intended educational scope. Evidence is gathered by checking generated
+results against well-known two-body properties (such as center-of-mass behavior
+and symmetry in equal-mass cases) and against reference solutions for selected
+scenarios, including closed-form circular-orbit checkpoints and high-precision
+numerical runs. In addition, feedback from the course instructor and peer
+reviewers is used to confirm that the chosen assumptions, inputs/outputs, and
+reported results align with the goals of the SRS and the expected use in a
+learning context.
 
-\wss{You might want to use review sessions with the stakeholder to check that
-the requirements document captures the right requirements.  Maybe task based
-inspection?}
-
-\wss{For those capstone teams with an external supervisor, the Rev 0 demo should 
-be used as an opportunity to validate the requirements.  You should plan on 
-demonstrating your project to your supervisor shortly after the scheduled Rev 0 demo.  
-The feedback from your supervisor will be very useful for improving your project.}
-
-\wss{For teams without an external supervisor, user testing can serve the same purpose 
-as a Rev 0 demo for the supervisor.}
-
-\wss{This section might reference back to the SRS verification section.}
-
+\newpage
 \section{System Tests}
 
-\wss{There should be text between all headings, even if it is just a roadmap of
-the contents of the subsections.}
+This section outlines the system-level tests for functional and nonfunctional
+requirements. The tests are grouped by topic so each set clearly maps to the
+requirements in the SRS.
 
-\subsection{Tests for Functional Requirements}
+\subsection{Tests for Functional Requirements}\label{SystemTests}
 
-\wss{Subsets of the tests may be in related, so this section is divided into
-  different areas.  If there are no identifiable subsets for the tests, this
-  level of document structure can be removed.}
+The functional tests below cover the input, validation, and output requirements
+from the SRS (R1--R5 \citep{SRS}).
 
-\wss{Include a blurb here to explain why the subsections below
-  cover the requirements.  References to the SRS would be good here.}
-
-\subsubsection{Area of Testing1}
-
-\wss{It would be nice to have a blurb here to explain why the subsections below
-  cover the requirements.  References to the SRS would be good here.  If a section
-  covers tests for input constraints, you should reference the data constraints
-  table in the SRS.}
-		
-\paragraph{Title for Test}
-
+The tests for functional requirements may be split into three categories:
 \begin{enumerate}
-
-\item{test-id1\\}
-
-Control: Manual versus Automatic
-					
-Initial State: 
-					
-Input: 
-					
-Output: \wss{The expected result for the given inputs.  Output is not how you
-are going to return the results of the test.  The output is the expected
-result.}
-
-Test Case Derivation: \wss{Justify the expected value given in the Output field}
-					
-How test will be performed: 
-					
-\item{test-id2\\}
-
-Control: Manual versus Automatic
-					
-Initial State: 
-					
-Input: 
-					
-Output: \wss{The expected result for the given inputs}
-
-Test Case Derivation: \wss{Justify the expected value given in the Output field}
-
-How test will be performed: 
-
+  \item testing that inputs match the understood inputs (R1, R2 \citep{SRS}),
+  \item testing that the IVP solver behaves as expected, and
+  \item testing that the whole program follows the instance models in the SRS
+  (R4, R5 \citep{SRS}).
 \end{enumerate}
 
-\subsubsection{Area of Testing2}
+\subsubsection{Inputs Are Outputted Accurately}
+When conducting all other functional tests, each test should also confirm that
+the inputs are re-iterated by the program before any calculation. This can be
+checked automatically by inspecting the output headers or manually by visual
+inspection.
 
-...
+\subsubsection{IVP Solver and Model Consistency}
+All IVP tests are run with a trivial initial state (program not running) and
+inputs that satisfy the constraints in Table 2 of \citep{SRS}. The expected
+outputs are verified against known two-body properties (e.g., center of mass
+behavior) or reference solutions derived from the instance models. When
+applicable, a trusted solver or analytic case is used as a control.
+
+\begin{landscape}
+\begin{table}[p]
+\centering
+\small
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabularx}{\linewidth}{|p{1.2cm}|p{2.8cm}|p{2.6cm}|p{3.4cm}|p{1.4cm}|>{\raggedright\arraybackslash}X|p{2.5cm}|}
+\hline
+\textbf{ID} &
+\multicolumn{4}{c|}{\textbf{Inputs}} &
+\textbf{Outputs} &
+\textbf{Control} \\
+\cline{2-6}
+ & $(m_1,m_2)$ &
+$(\mathbf{r}_1(0),\mathbf{r}_2(0))$ &
+$(\mathbf{v}_1(0),\mathbf{v}_2(0))$ &
+$t_{\text{final}}$ &
+$(\mathbf{r}_1(t), \mathbf{r}_2(t))$ &  \\
+\hline
+T1IVP & $(2.0\mathrm{E}30,1.6\mathrm{E}30)$ &
+$(7.5\mathrm{E}10,0)$, $(-9.375\mathrm{E}10,0)$ &
+$(2.0\mathrm{E}3,9.0\mathrm{E}3)$, $(-2.5\mathrm{E}3,-1.125\mathrm{E}4)$ &
+$1.0\mathrm{E}5$ &
+Inputs are echoed before any trajectory output. &
+C1 \\
+\hline
+T2IVP & $(2.0\mathrm{E}30,1.6\mathrm{E}30)$ &
+$(7.5\mathrm{E}10,0)$, $(-9.0\mathrm{E}10,0)$ &
+$(2.0\mathrm{E}3,9.0\mathrm{E}3)$, $(-2.5\mathrm{E}3,-1.125\mathrm{E}4)$ &
+$1.0\mathrm{E}5$ &
+Center-of-mass constraint violation is reported, and no trajectory output is produced. &
+C2 \\
+\hline
+T3IVP & $(1.0\mathrm{E}30,1.0\mathrm{E}30)$ &
+$(1.0\mathrm{E}10,0)$, $(-1.0\mathrm{E}10,0)$ &
+$(0,3.50\mathrm{E}4)$, $(0,-3.50\mathrm{E}4)$ &
+$3.15\mathrm{E}7$ &
+Sampled symmetric trajectories $\mathbf{r}_1(t)$ and $\mathbf{r}_2(t)$ over
+$[0,t_{\text{final}}]$. &
+C3 \\
+\hline
+T4IVP & $(1.0\mathrm{E}30, 1.0\mathrm{E}30)$ &
+$(1.0\mathrm{E}10,0)$, $(-1.0\mathrm{E}10,0)$ &
+$(0,4.09\mathrm{E}4)$, $(0,-4.09\mathrm{E}4)$ &
+$1.538\mathrm{E}6$ &
+Sample orbit points:
+$t=0$ (initial), $t=P/4$, $t=P/2$, $t=3P/4$, and $t=P$ (return to initial). &
+C4 \\
+\hline
+T5IVP & $(2.0\mathrm{E}30,1.6\mathrm{E}30)$ &
+$(7.5\mathrm{E}10,0)$, $(-9.375\mathrm{E}10,0)$ &
+$(2.0\mathrm{E}3,9.0\mathrm{E}3)$, $(-2.5\mathrm{E}3,-1.125\mathrm{E}4)$ &
+$1.0\mathrm{E}5$ &
+Sampled general-case trajectories $\mathbf{r}_1(t)$ and $\mathbf{r}_2(t)$ over
+$[0,t_{\text{final}}]$. &
+C5 \\
+\hline
+\end{tabularx}
+\caption{Automatic Functional Tests for the IVP Solver (T1IVP--T5IVP)}
+\label{tab:func-tests}
+\end{table}
+\end{landscape}
+
+
+Table~\ref{tab:func-tests} summarizes the automated functional test cases for
+the IVP based simulation workflow. Each row specifies a complete system level
+test, including a concrete input configuration, the expected observable
+behaviour, and the automated decision procedure used to determine pass or fail.
+The \textbf{Outputs} column describes what is checked at the system boundary
+(stdout and produced trajectory records), while the \textbf{Control} column
+identifies the specific automated oracle used to evaluate the result. This
+separation makes the acceptance criteria explicit and supports repeatable
+execution in a test harness.
+
+The control identifiers in Table~\ref{tab:func-tests} correspond to the
+following automated checks:
+
+\begin{itemize}
+  \item \textbf{C1 (Echo and schema):} Verify that the program echoes the parsed
+  inputs before any computed trajectory values are printed, and that the output
+  conforms to the expected structure (presence of required fields, ordering,
+  units or labels where applicable, and consistent row formatting).
+
+  \item \textbf{C2 (Constraint violation handling):} Provide an input set that
+  violates the center of mass consistency constraint, then verify that the
+  program reports a validation error that is specific and user visible, and
+  terminates without emitting any trajectory records.
+
+  \item \textbf{C3 (Symmetry and invariants):} For the equal mass symmetric
+  configuration, sample $N=2000$ time points $t_k$ over
+  $[0, t_{\text{final}}]$. Accept if both invariants hold within tolerance:
+  $\max_k \lVert \mathbf{r}_{cm}(t_k)\rVert \le \epsilon_{cm}$ and
+  $\max_k \lVert \mathbf{r}_1(t_k)+\mathbf{r}_2(t_k)\rVert \le \epsilon_{sym}$.
+  This check targets model consistency properties that should be solver
+  independent in exact arithmetic.
+
+  \item \textbf{C4 (Analytic circular orbit checkpoints):} Use a configuration
+  that admits a closed form circular orbit solution. Evaluate the predicted
+  positions at the phase checkpoints $t \in \{0, P/4, P/2, 3P/4, P\}$, where
+  $P$ and $\omega$ are computed from the analytic model parameters. Accept if
+  $\lVert \mathbf{r}_i(t)-\mathbf{r}_{i,\text{ref}}(t)\rVert \le \epsilon_r^{(4)}$
+  for both bodies at each checkpoint. This provides a deterministic oracle
+  based on the analytic model rather than on empirical expectations.
+
+  \item \textbf{C5 (High precision reference comparison):} Compute a reference
+  trajectory using a validated high precision solver configuration, then sample
+  $N=1000$ time points $t_k$ over $[0, t_{\text{final}}]$. Accept if
+  $\max_k \lVert \mathbf{r}_1(t_k)-\mathbf{r}_{1,\text{ref}}(t_k)\rVert \le \epsilon_r^{(5)}$
+  and
+  $\max_k \lVert \mathbf{r}_2(t_k)-\mathbf{r}_{2,\text{ref}}(t_k)\rVert \le \epsilon_r^{(5)}$.
+  This check targets the general case where no simple analytic oracle is
+  available.
+\end{itemize}
+
+\textbf{Oracle hierarchy and rationale.}
+Different tests use different oracle strengths. For T4IVP (C4), the primary
+oracle is the closed form circular orbit model, because it provides
+implementation independent expected values. Any solver based cross check is
+secondary and is used only to guard against arithmetic or transcription errors
+in the analytic parameter calculation. For T5IVP (C5), the primary oracle is a
+validated high precision numerical reference, because the general case does not
+admit a practical closed form solution.
+
+\textbf{Sampling strategy and tolerances.}
+Automated comparisons are performed on sampled time points $t_k$ to avoid
+assuming access to the solver's internal step sequence. Unless otherwise stated
+(C4 uses fixed checkpoints), samples are taken uniformly over
+$[0, t_{\text{final}}]$. The symbolic tolerances $\epsilon_{cm}$,
+$\epsilon_{sym}$, $\epsilon_r^{(4)}$, and $\epsilon_r^{(5)}$ define acceptance
+bands for numerical error.
+The default values used in this plan are
+$\epsilon_{cm}=\epsilon_{sym}=1.0\mathrm{E}6$ m,
+$\epsilon_r^{(4)}=1.0\mathrm{E}4$ m, and
+$\epsilon_r^{(5)}=1.0\mathrm{E}6$ m.
+
+\textbf{Role of the test set.}
+Together, T1IVP and T2IVP establish correct input handling and constraint
+enforcement at the system boundary. T3IVP checks invariant properties that must
+hold for symmetric configurations. T4IVP provides a high confidence analytic
+checkpoint test with deterministic expected values. T5IVP complements this by
+covering a non symmetric, general configuration using a high precision
+reference trajectory.
 
 \subsection{Tests for Nonfunctional Requirements}
 
-\wss{The nonfunctional requirements for accuracy will likely just reference the
-  appropriate functional tests from above.  The test cases should mention
-  reporting the relative error for these tests.  Not all projects will
-  necessarily have nonfunctional requirements related to accuracy.}
-
-\wss{For some nonfunctional tests, you won't be setting a target threshold for
-passing the test, but rather describing the experiment you will do to measure
-the quality for different inputs.  For instance, you could measure speed versus
-the problem size.  The output of the test isn't pass/fail, but rather a summary
-table or graph.}
-
-\wss{Tests related to usability could include conducting a usability test and
-  survey.  The survey will be in the Appendix.}
-
-\wss{Static tests, review, inspections, and walkthroughs, will not follow the
-format for the tests given below.}
-
-\wss{If you introduce static tests in your plan, you need to provide details.
-How will they be done?  In cases like code (or document) walkthroughs, who will
-be involved? Be specific.}
-
-\subsubsection{Area of Testing1}
-		
-\paragraph{Title for Test}
+The nonfunctional requirements for BSS are evaluated through a combination of
+functional-test evidence, automated checks, and review-based verification.
 
 \begin{enumerate}
+  \item \textbf{TNFR1 (Accuracy):} Accuracy is assessed primarily through the
+  functional tests in Section 5.1, especially the analytic circular-orbit case
+  (T4IVP) and the general-case reference comparison (T5IVP). These tests use
+  explicit tolerances ($\epsilon_r^{(4)}$, $\epsilon_r^{(5)}$,
+  $\epsilon_{cm}$, $\epsilon_{sym}$) to
+  quantify acceptable numerical error.
 
-\item{test-id1\\}
+  \item \textbf{TNFR2 (Usability):} Usability depends on whether Drasil-
+  generated code produces output users can read and use. We check this by
+  verifying input echoing, clear validation errors, and consistent output
+  structure (see T1IVP, T2IVP, and output-format checks tied to the SRS
+  output-variable definitions).
 
-Type: Functional, Dynamic, Manual, Static etc.
-					
-Initial State: 
-					
-Input/Condition: 
-					
-Output/Result: 
-					
-How test will be performed: 
-					
-\item{test-id2\\}
+  \item \textbf{TNFR3 (Maintainability):} Maintainability is supported by
+  constructing the system in Drasil, where changes in information ripple
+  through the knowledge base and regeneration updates related artifacts.
 
-Type: Functional, Dynamic, Manual, Static etc.
-					
-Initial State: 
-					
-Input: 
-					
-Output: 
-					
-How test will be performed: 
-
+  \item \textbf{TNFR4 (Portability):} Portability is evaluated with GitHub
+  Actions by running the generated program on target platforms (macOS and
+  Linux, optionally Windows) and confirming successful execution and consistent
+  outputs for the same test inputs.
 \end{enumerate}
 
-\subsubsection{Area of Testing2}
-
-...
+Overall, these NFRs are expected to be strengthened by the Drasil workflow, but
+they are still treated as testable claims. Confidence is established through
+reproducible checks on generated artifacts, not by assumption alone.
 
 \subsection{Traceability Between Test Cases and Requirements}
 
-\wss{Provide a table that shows which test cases are supporting which
-  requirements.}
+Table~\ref{tab:test-req-trace} maps the planned test cases to the functional
+and nonfunctional requirements in the SRS.
+
+\begin{table}[h!]
+\centering
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{lccccccccc}
+\toprule
+\textbf{Test Case} & \textbf{R1} & \textbf{R2} & \textbf{R3} & \textbf{R4} &
+\textbf{R5} & \textbf{NFR1} & \textbf{NFR2} & \textbf{NFR3} & \textbf{NFR4} \\
+\midrule
+T1IVP  & X & X &   &   &   &   & X &   &   \\
+T2IVP  &   &   & X &   &   &   & X &   &   \\
+T3IVP  &   &   &   & X &   & X &   &   &   \\
+T4IVP  &   &   &   & X &   & X &   &   &   \\
+T5IVP  &   &   &   & X & X & X &   &   &   \\
+TNFR1  &   &   &   &   &   & X &   &   &   \\
+TNFR2  &   &   &   &   &   &   & X &   &   \\
+TNFR3  &   &   &   &   &   &   &   & X &   \\
+TNFR4  &   &   &   &   &   &   &   &   & X \\
+\bottomrule
+\end{tabular}
+\caption{Tracing Tests to Requirements}
+\label{tab:test-req-trace}
+\end{table}
+
+\newpage
 
 \section{Unit Test Description}
 
-\wss{This section should not be filled in until after the MIS (detailed design
-  document) has been completed.}
+No software design documents will be produced for this Drasil project. We will
+set up a testing environment around the Drasil-generated artifacts. This
+section will be completed after Drasil starts generating code.
 
-\wss{Reference your MIS (detailed design document) and explain your overall
-philosophy for test case selection.}  
-
-\wss{To save space and time, it may be an option to provide less detail in this section.  
-For the unit tests you can potentially layout your testing strategy here.  That is, you 
-can explain how tests will be selected for each module.  For instance, your test building 
-approach could be test cases for each access program, including one test for normal behaviour 
-and as many tests as needed for edge cases.  Rather than create the details of the input 
-and output here, you could point to the unit testing code.  For this to work, you code 
-needs to be well-documented, with meaningful names for all of the tests.}
-
-\subsection{Unit Testing Scope}
-
-\wss{What modules are outside of the scope.  If there are modules that are
-  developed by someone else, then you would say here if you aren't planning on
-  verifying them.  There may also be modules that are part of your software, but
-  have a lower priority for verification than others.  If this is the case,
-  explain your rationale for the ranking of module importance.}
-
-\subsection{Tests for Functional Requirements}
-
-\wss{Most of the verification will be through automated unit testing.  If
-  appropriate specific modules can be verified by a non-testing based
-  technique.  That can also be documented in this section.}
-
-\subsubsection{Module 1}
-
-\wss{Include a blurb here to explain why the subsections below cover the module.
-  References to the MIS would be good.  You will want tests from a black box
-  perspective and from a white box perspective.  Explain to the reader how the
-  tests were selected.}
-
-\begin{enumerate}
-
-\item{test-id1\\}
-
-Type: \wss{Functional, Dynamic, Manual, Automatic, Static etc. Most will
-  be automatic}
-					
-Initial State: 
-					
-Input: 
-					
-Output: \wss{The expected result for the given inputs}
-
-Test Case Derivation: \wss{Justify the expected value given in the Output field}
-
-How test will be performed: 
-					
-\item{test-id2\\}
-
-Type: \wss{Functional, Dynamic, Manual, Automatic, Static etc. Most will
-  be automatic}
-					
-Initial State: 
-					
-Input: 
-					
-Output: \wss{The expected result for the given inputs}
-
-Test Case Derivation: \wss{Justify the expected value given in the Output field}
-
-How test will be performed: 
-
-\item{...\\}
-    
-\end{enumerate}
-
-\subsubsection{Module 2}
-
-...
-
-\subsection{Tests for Nonfunctional Requirements}
-
-\wss{If there is a module that needs to be independently assessed for
-  performance, those test cases can go here.  In some projects, planning for
-  nonfunctional tests of units will not be that relevant.}
-
-\wss{These tests may involve collecting performance data from previously
-  mentioned functional tests.}
-
-\subsubsection{Module ?}
-		
-\begin{enumerate}
-
-\item{test-id1\\}
-
-Type: \wss{Functional, Dynamic, Manual, Automatic, Static etc. Most will
-  be automatic}
-					
-Initial State: 
-					
-Input/Condition: 
-					
-Output/Result: 
-					
-How test will be performed: 
-					
-\item{test-id2\\}
-
-Type: Functional, Dynamic, Manual, Static etc.
-					
-Initial State: 
-					
-Input: 
-					
-Output: 
-					
-How test will be performed: 
-
-\end{enumerate}
-
-\subsubsection{Module ?}
-
-...
-
-\subsection{Traceability Between Test Cases and Modules}
-
-\wss{Provide evidence that all modules have been considered.}
-				
+\newpage
 \bibliographystyle{plainnat}
 
 \bibliography{../../refs/References}
@@ -483,40 +525,23 @@ How test will be performed:
 
 \section{Appendix}
 
-This is where you can place additional information.
-
 \subsection{Symbolic Parameters}
 
-The definition of the test cases will call for SYMBOLIC\_CONSTANTS.
-Their values are defined in this section for easy maintenance.
+In addition to the symbolic parameters defined in the SRS \citep{SRS}, this
+plan uses the following tolerances for automated acceptance checks:
+\begin{itemize}
+  \item $\epsilon_{cm}=1.0\mathrm{E}6$ m (center-of-mass tolerance),
+  \item $\epsilon_{sym}=1.0\mathrm{E}6$ m (symmetry tolerance),
+  \item $\epsilon_r^{(4)}=1.0\mathrm{E}4$ m (analytic checkpoint tolerance for T4IVP),
+  \item $\epsilon_r^{(5)}=1.0\mathrm{E}6$ m (reference-solver comparison tolerance for T5IVP).
+\end{itemize}
 
-\subsection{Usability Survey Questions?}
+\subsection{Usability Survey Questions}
 
-\wss{This is a section that would be appropriate for some projects.}
+No formal usability survey is planned in the current scope, but a short user
+survey can be considered in future iterations if additional user-facing
+evaluation is needed.
 
 \newpage{}
-\section*{Appendix --- Reflection}
-
-\wss{This section is not required for CAS 741}
-
-The information in this section will be used to evaluate the team members on the
-graduate attribute of Lifelong Learning.
-
-\input{../Reflection.text}
-
-\begin{enumerate}
-  \item What went well while writing this deliverable? 
-  \item What pain points did you experience during this deliverable, and how
-    did you resolve them?
-  \item What knowledge and skills will the team collectively need to acquire to
-  successfully complete the verification and validation of your project?
-  Examples of possible knowledge and skills include dynamic testing knowledge,
-  static testing knowledge, specific tool usage, Valgrind etc.  You should look to
-  identify at least one item for each team member.
-  \item For each of the knowledge areas and skills identified in the previous
-  question, what are at least two approaches to acquiring the knowledge or
-  mastering the skill?  Of the identified approaches, which will each team
-  member pursue, and why did they make this choice?
-\end{enumerate}
 
 \end{document}
