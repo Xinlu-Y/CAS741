@@ -152,6 +152,7 @@ Jan. 27, 2026 & 0.1 & Imported SRS template and set up document structure.\\
 Jan. 28, 2026 & 0.2 & Filled in problem description and core models.\\
 Jan. 29, 2026 & 0.3 & Completed requirements and traceability tables.\\
 Feb. 2, 2026 & 0.4 & Complete rough draft.\\
+Mar. 4, 2026 & 0.5 & Revised per reviewer feedback: restructured TMs, improved IM, added energy conservation, improved traceability.\\
 \bottomrule
 \end{tabularx}
 
@@ -172,17 +173,14 @@ description of the unit and the SI name. ~\newline
 
 \renewcommand{\arraystretch}{1.2}
 %\begin{table}[ht]
-  \noindent \begin{tabular}{l l l} 
-  \toprule		
+  \noindent \begin{tabular}{l l l}
+  \toprule
   \textbf{symbol} & \textbf{quantity} & \textbf{SI name}\\
-  \midrule 
+  \midrule
   \si{\metre} & length & metre\\
   \si{\kilogram} & mass & kilogram\\
   \si{\second} & time & second\\
-  \si{\metre\per\second} & velocity & metre per second\\
-  \si{\metre\per\second\squared} & acceleration & metre per second squared\\
   \si{\newton} & force & newton\\
-  \si{\metre\cubed\per\kilogram\per\second\squared} & derived (for $G$) & metre cubed per kilogram per second squared\\
   \bottomrule
   \end{tabular}
   %	\caption{Provide a caption}
@@ -210,7 +208,12 @@ $\mathbf{v}_2(t)$ & \si{\metre\per\second} & velocity vector of star 2 at time $
 $\mathbf{a}_1(t)$ & \si{\metre\per\second\squared} & acceleration vector of star 1 at time $t$ \\
 $\mathbf{a}_2(t)$ & \si{\metre\per\second\squared} & acceleration vector of star 2 at time $t$ \\
 $\mathbf{F}_{12}$ & \si{\newton} & gravitational force on star 1 due to star 2 \\
+$\mathbf{r}_1^0$ & \si{\metre} & initial position vector of star 1 \\
+$\mathbf{r}_2^0$ & \si{\metre} & initial position vector of star 2 \\
+$\mathbf{v}_1^0$ & \si{\metre\per\second} & initial velocity vector of star 1 \\
+$\mathbf{v}_2^0$ & \si{\metre\per\second} & initial velocity vector of star 2 \\
 $t_{\text{final}}$ & \si{\second} & end time of the simulation interval \\
+$E$ & \si{\joule} & total mechanical energy of the system \\
 \bottomrule
 \end{longtable*}
 
@@ -251,8 +254,8 @@ interaction. Many binary systems can be simplified as two bodies affected only
 by each other’s gravity.
 
 Software can be used to simulate how a binary star system evolves over time.
-Such simulations are useful for learning and for analysis. In this document, a
-software artifact that meets these requirements is called Binary Star System
+Such simulations are useful for learning and for analysis. In this document, the
+software designed to perform this simulation is called Binary Star System
 Simulator (BSS).
 
 This document presents the Software Requirements Specification (SRS) for BSS. It
@@ -282,19 +285,15 @@ simple and focused on the two-body model.
 
 \subsection{Characteristics of Intended Reader} \label{sec_IntendedReader}
 
-This document targets readers with basic undergraduate physics and mathematics.
-Readers are expected to understand Newton's laws, Newtonian gravity, and common
-calculus and linear algebra concepts such as vectors, derivatives, and
-integrals. Familiarity with introductory differential equations will help when
-reading the parts that describe how the system changes over time.
+This document targets readers with first-year undergraduate physics and
+mathematics. Readers are expected to understand Newton's laws, Newtonian
+gravity, and common calculus and linear algebra concepts such as vectors,
+derivatives, and integrals. Familiarity with introductory differential equations
+will help when reading the parts that describe how the system changes over time.
 
 A stronger background in classical mechanics, especially two-body motion and
 conservation laws, will make it easier to review and audit the models and
 assumptions.
-
-This document is intended for educational use only and is provided ``as is,''
-without warranty. The author accepts no liability for any damages arising from
-its use.
 
 
 \subsection{Organization of Document}
@@ -316,7 +315,7 @@ familiar with the SRS template, the author's recommended reading order is:
     \nameref{sec_theoretical} (Section~\ref{sec_theoretical})
 \end{itemize}
 
-The other material is referential and may be read as needed.
+\noindent The other material is referential and may be read as needed.
 \newpage
 
 \section{General System Description} \label{sec_GeneralSystemDescription}
@@ -360,8 +359,8 @@ governing equations and returns either a solution or an error.
 \begin{itemize}
   \item BSS Responsibilities:
     \begin{itemize}
-      \item Detecting data type mismatches, such as invalid numerical inputs or
-        inconsistent parameter dimensions.
+      \item Verifying data type correctness, such as detecting invalid numerical
+        inputs or inconsistent parameter dimensions.
       \item Validating the applicability of the input arguments to the physical
         assumptions and models specified in this document.
       \item Computing the time evolution of the binary star system under
@@ -385,15 +384,17 @@ equivalent to first-year university physics and calculus is sufficient to
 interpret the results and simulate a binary star system under simplified
 conditions.
 
-The author of this document accepts no liability and provides no warranty for
-any usage of the software. The software should be appropriately audited by
-qualified authorities and conform to applicable local laws and regulations.
-
 \subsection{System Constraints}
 
-The software shall be developed using Drasil to encode the problem and generate
-a binary star system simulation based on an IVP formulation. No additional
-system constraints are imposed.
+The following system constraints apply:
+\begin{itemize}
+\item The software shall be developed using Drasil to encode the problem
+  knowledge and generate a binary star system simulation based on an IVP
+  formulation.
+\item The specification and models are encoded using Drasil so that changes to
+  parameters, assumptions, or models are propagated automatically to the
+  generated artifacts.
+\end{itemize}
 \newpage
 \section{Specific System Description} \label{sec_SpecificSystemDescription}
 
@@ -452,11 +453,14 @@ moving in a two-dimensional inertial reference frame.
 
 The physical system is described at an initial time by the positions and
 velocities of the two stars. Motion is considered relative to a fixed inertial
-frame, and distances are measured using a Cartesian coordinate system. The
-center of mass of the system follows inertial motion, while each star orbits
-around the center of mass according to the gravitational interaction. The orbit
-shown in the figure is illustrative only. The actual trajectory depends on the
-initial conditions and is not necessarily elliptical.
+frame, and distances are measured using a Cartesian coordinate system. Cartesian
+coordinates are chosen over polar coordinates because they simplify the
+formulation of the equations of motion for two independent bodies without
+requiring a predefined orbital geometry; this is a significant modelling
+decision. The center of mass of the system follows inertial motion, while each
+star orbits around the center of mass according to the gravitational
+interaction. The orbit shown in the figure is illustrative only. The actual
+trajectory depends on the initial conditions and is not necessarily elliptical.
 
 The physical system examined in this document therefore consists of the
 following components:
@@ -482,12 +486,13 @@ initial conditions.
 
 \subsubsection{Goal Statements} \label{sec_GoalStatements}
 
-\noindent Given the masses, initial positions, and initial velocities of two stars, the goal statements are:
+\noindent Given the masses, the initial positions, the initial velocities of two
+stars, and the total simulation time, the goal statements are:
 
 \begin{itemize}
 
 \item[GS\refstepcounter{goalnum}\thegoalnum \label{G_positionsOverTime}:]
-Determine the positions of both stars as functions of time over a specified
+Determine the positions of both stars as functions of time over the specified
 simulation interval.
 
 \end{itemize}
@@ -540,8 +545,8 @@ The motion of the binary star system is confined to a two-dimensional plane.
 
 \item[A\refstepcounter{assumpnum}\theassumpnum \label{A_nonzeroSeparation}:]
 Collisions are out of scope: the separation distance satisfies $r_{12}(t) > 0$
-for all simulated times (\dref{GD:RelPosSep}), so the gravitational force model
-remains well-defined.
+for all simulated times (\tref{TM6}), so the gravitational force model remains
+well-defined.
 
 \end{itemize}
 
@@ -555,14 +560,16 @@ This section focuses on the general equations and laws that BSS is based on.
 % #2 refname of theory
 {TM1}
 % #3 label
-{Center-of-Mass Reference Frame}
+{Center-of-Mass Position}
 % #4 equation
-{ $\mathbf{R} = \dfrac{m_1 \mathbf{r}_1 + m_2 \mathbf{r}_2}{m_1 + m_2}$ }
+{ $\mathbf{R} = \dfrac{\displaystyle\sum_{i=1}^{n} m_i \mathbf{r}_i}{\displaystyle\sum_{i=1}^{n} m_i}$ }
 % #5 description
 { The above equation defines the center-of-mass (COM) position $\mathbf{R}$ of a
-two-body system, where $m_1$ and $m_2$ are the masses of the two stars and
-$\mathbf{r}_1$ and $\mathbf{r}_2$ are their position vectors. In the COM
-reference frame, the origin is chosen such that $\mathbf{R}=\mathbf{0}$. }
+system of $n$ point masses, where $m_i$ and $\mathbf{r}_i$ are the mass and
+position vector of the $i$-th body. For the binary star system ($n=2$), this
+reduces to $\mathbf{R} = (m_1 \mathbf{r}_1 + m_2 \mathbf{r}_2)/(m_1 + m_2)$.
+In the COM reference frame, the origin is chosen such that
+$\mathbf{R}=\mathbf{0}$. }
 % #6 Notes
 { None. }
 % #7 Source
@@ -579,42 +586,60 @@ reference frame, the origin is chosen such that $\mathbf{R}=\mathbf{0}$. }
 {}
 \noindent
 \deftheory
-{TM2} {Kinematics: Position, Velocity, and Acceleration} { $\mathbf{v}(t) =
-\dfrac{d\mathbf{r}(t)}{dt}$,
-  \quad
-$\mathbf{a}(t) = \dfrac{d\mathbf{v}(t)}{dt} = \dfrac{d^2\mathbf{r}(t)}{dt^2}$ }
-{ This model defines velocity $\mathbf{v}(t)$ and acceleration $\mathbf{a}(t)$
-as time derivatives of the position vector $\mathbf{r}(t)$. } { None. } {
+{TM2} {Velocity} { $\mathbf{v}(t) = \dfrac{d\mathbf{r}(t)}{dt}$ }
+{ This model defines velocity $\mathbf{v}(t)$ as the time derivative of the
+position vector $\mathbf{r}(t)$. }
+{ None. } {
+  \citep{Taylor2005}
+} {
+  \tref{TM3}, \iref{IM:Orbit}
+} { None. } {}
+\noindent
+\deftheory
+{TM3} {Acceleration} { $\mathbf{a}(t) = \dfrac{d\mathbf{v}(t)}{dt} =
+\dfrac{d^2\mathbf{r}(t)}{dt^2}$ }
+{ This model defines acceleration $\mathbf{a}(t)$ as the time derivative of
+velocity, or equivalently the second time derivative of position. }
+{ None. } {
   \citep{Taylor2005}
 } {
   \iref{IM:Orbit}
 } { None. } {}
 \noindent
 \deftheory
-{TM3} {Newton's Law of Universal Gravitation} { $\mathbf{F}_{12} = - G \frac{m_1
+{TM4} {Newton's Second Law of Motion} { $\mathbf{F} = m\,\mathbf{a}$ }
+{ The net force $\mathbf{F}$ acting on a body of mass $m$ equals the product of
+its mass and its acceleration $\mathbf{a}$. This fundamental law relates force
+to the resulting change in motion. }
+{ None. } {
+  \citep{Taylor2005}
+} {
+  \iref{IM:Orbit}
+} { None. } {}
+\noindent
+\deftheory
+{TM5} {Newton's Law of Universal Gravitation} { $\mathbf{F}_{12} = - G \frac{m_1
 m_2}{r_{12}^3}\,\mathbf{r}_{12}$, where $\mathbf{r}_{12}=\mathbf{r}_{12}(t)$ and
-$r_{12}=r_{12}(t)$ (\dref{GD:RelPosSep}). } { The above equation gives the
-gravitational force exerted between two stars of masses $m_1$ and $m_2$. The
-force is proportional to the product of the masses and inversely proportional to
-the square of the distance between them, acting along the line joining their
+$r_{12}=r_{12}(t)$ (\tref{TM6}). } { The above equation gives the gravitational
+force exerted between two bodies of masses $m_1$ and $m_2$. The force is
+proportional to the product of the masses and inversely proportional to the
+square of the distance between them, acting along the line joining their
 positions. } { None. } {
   \citep{Taylor2005}
 } {
-  \tref{TM4}
+  \iref{IM:Orbit}
 } { None. } {}
 \noindent
 \deftheory
-{TM4} {Equations of Motion for a Two-Body System} { $m_1 \mathbf{a}_1 =
-\mathbf{F}_{12},
-  \quad
-m_2 \mathbf{a}_2 = -\mathbf{F}_{12}$ } { This model relates the motion of each
-star to the gravitational force acting on it according to Newton's second law of
-motion. Together with
-  \tref{TM3}, these equations govern the dynamics of the binary star system.
-} { None. } {
-  \citep{Taylor2005}
+{TM6} {Relative Position and Separation} {
+$\mathbf{r}_{12}(t) = \mathbf{r}_1(t) - \mathbf{r}_2(t)$, \quad
+$r_{12}(t) = \lVert \mathbf{r}_{12}(t) \rVert$
+} { $\mathbf{r}_{12}(t)$ is the relative position vector from star 2 to star 1,
+and $r_{12}(t)$ is the corresponding separation distance. }
+{ None. } {
+  ---
 } {
-  \iref{IM:Orbit}
+  \tref{TM5}, \iref{IM:Orbit}
 } { None. } {}
 
 
@@ -622,39 +647,8 @@ motion. Together with
 
 \subsubsection{General Definitions}\label{sec_gendef}
 
-This section collects the laws and equations that will be used in building the
-instance models.
-
-~\newline
-
-\noindent
-\begin{minipage}{\textwidth}
-\renewcommand*{\arraystretch}{1.5}
-\begin{tabular}{| p{\colAwidth} | p{\colBwidth}|}
-\hline
-\rowcolor[gray]{0.9}
-Number& GD\refstepcounter{defnum}\thedefnum \label{GD:RelPosSep}\\
-\hline
-Label &\bf Relative position and separation \\
-\hline
-SI Units&\si{\metre}\\
-\hline
-Equation&
-$\mathbf{r}_{12}(t) = \mathbf{r}_1(t) - \mathbf{r}_2(t)$, \\
-& $r_{12}(t) = \lVert \mathbf{r}_{12}(t) \rVert$
-\\
-\hline
-Description &
-$\mathbf{r}_{12}(t)$ is the relative position vector from star 2 to star 1, and
-$r_{12}(t)$ is the corresponding separation distance.
-\\
-\hline
-  Source & --- \\
-  \hline
-  Ref.\ By & \tref{TM3}, \iref{IM:Orbit}\\
-  \hline
-\end{tabular}
-\end{minipage}\\
+There are no additional general definitions beyond the theoretical models listed
+above.
 
 ~\newline
 
@@ -687,7 +681,7 @@ $G$ is the universal gravitational constant used in Newton's law of gravitation.
 \hline
 Sources& \citep{CODATA2018}\\
 \hline
-Ref.\ By & \tref{TM3}, \tref{TM4}, \iref{IM:Orbit}\\
+Ref.\ By & \tref{TM5}, \iref{IM:Orbit}\\
 \hline
 \end{tabular}
 \end{minipage}\\
@@ -701,7 +695,7 @@ sufficient. As such, the specifications define no extra data types.\\
 This section transforms the problem defined in Section~\ref{Sec_pd} into one
 which is expressed in mathematical terms. It uses concrete symbols defined in
 Section~\ref{sec_datadef} to replace the abstract symbols in the models
-identified in Sections~\ref{sec_theoretical} and~\ref{sec_gendef}. The goals
+identified in Sections~\ref{sec_theoretical} and~\ref{sec_gendef}. The goal
 \gsref{G_positionsOverTime} is solved by \iref{IM:Orbit}.
 
 ~\newline
@@ -720,44 +714,51 @@ identified in Sections~\ref{sec_theoretical} and~\ref{sec_gendef}. The goals
   \hline
   Input &
   \begin{tabular}[t]{@{}l@{}}
-    $m_1$, $m_2$, $\mathbf{r}_1(0)$, $\mathbf{r}_2(0)$,
-    $\mathbf{v}_1(0)$, $\mathbf{v}_2(0)$, $t_\text{final}$
+    $m_1$, $m_2$, $\mathbf{r}_1^0$, $\mathbf{r}_2^0$,
+    $\mathbf{v}_1^0$, $\mathbf{v}_2^0$, $t_\text{final}$
   \end{tabular} \\
   \hline
   Output &
   \begin{tabular}[t]{@{}l@{}}
     $\mathbf{r}_1(t)$, $\mathbf{r}_2(t)$ for $0 \le t \le t_\text{final}$,\\
-    where the output is the solution of the following IVP:
+    where the output is the solution of the following ODE system:
   \end{tabular} \\
   &
-  $m_1 \mathbf{a}_1(t) = - G \dfrac{m_1 m_2}{r_{12}(t)^3}\,\mathbf{r}_{12}(t),\quad
-  m_2 \mathbf{a}_2(t) = \phantom{-} G \dfrac{m_1 m_2}{r_{12}(t)^3}\,\mathbf{r}_{12}(t)$, \\
+  $\dfrac{d^2\mathbf{r}_1}{dt^2} = - G \dfrac{m_2}{r_{12}(t)^3}\,\mathbf{r}_{12}(t),\quad
+  \dfrac{d^2\mathbf{r}_2}{dt^2} = \phantom{-} G \dfrac{m_1}{r_{12}(t)^3}\,\mathbf{r}_{12}(t)$, \\
   &
   \begin{tabular}[t]{@{}l@{}}
-    with initial conditions $\mathbf{r}_1(0)$, $\mathbf{r}_2(0)$, $\mathbf{v}_1(0)$, $\mathbf{v}_2(0)$.
+    with initial conditions
+    $\mathbf{r}_1(0) = \mathbf{r}_1^0$,\;
+    $\mathbf{r}_2(0) = \mathbf{r}_2^0$,\;
+    $\mathbf{v}_1(0) = \mathbf{v}_1^0$,\;
+    $\mathbf{v}_2(0) = \mathbf{v}_2^0$.
   \end{tabular} \\
   \hline
   Description &
-  The above output is the solution of the above defined IVP. Here,\\
-  &
-  $\mathbf{a}_1(t)$ and $\mathbf{a}_2(t)$ are the acceleration vectors of stars 1 and 2
-  (\si{\metre\per\second\squared}). \\
+  The above output is the solution of the above defined ODE initial value
+  problem. The equations are second-order ODEs solved for the position vectors
+  $\mathbf{r}_1(t)$ and $\mathbf{r}_2(t)$. Here,\\
   &
   $m_1$ and $m_2$ are the masses of the two stars (\si{\kilogram}). \\
   &
-  $\mathbf{r}_{12}(t)$ is the relative position vector from star 2 to star 1
-  (\si{\metre}), and $r_{12}(t)=\lVert\mathbf{r}_{12}(t)\rVert$ is the corresponding
-  separation distance.
-  \\
+  $\mathbf{r}_1^0$, $\mathbf{r}_2^0$ are the initial position vectors
+  (\si{\metre}). \\
   &
-  $G$ is the gravitational constant
-  (\si{\metre^3\per\kilogram\per\second^2}). \\
+  $\mathbf{v}_1^0$, $\mathbf{v}_2^0$ are the initial velocity vectors
+  (\si{\metre\per\second}). \\
+  &
+  $\mathbf{r}_{12}(t) = \mathbf{r}_1(t) - \mathbf{r}_2(t)$ is the relative
+  position vector (\tref{TM6}), and
+  $r_{12}(t)=\lVert\mathbf{r}_{12}(t)\rVert$ is the separation distance. \\
+  &
+  $G$ is the gravitational constant (\ddref{DD:G}). \\
   &
   $t_\text{final}$ is the final simulation time (\si{\second}). \\
   \hline
-  Sources & --- \\
+  Sources & \citep{Taylor2005} \\
   \hline
-  Ref.\ By & --- \\
+  Ref.\ By & \rref{R_Output}, \rref{R_VerifyOutput} \\
   \hline
 \end{tabular}
 \end{minipage}
@@ -766,14 +767,17 @@ identified in Sections~\ref{sec_theoretical} and~\ref{sec_gendef}. The goals
 
 \subsubsection*{Derivation of Binary Star Orbital Motion}
 
-This model is a direct instantiation of \tref{TM3} and \tref{TM4} as an IVP for
-a two-body system (\aref{A_twoBody}) in a planar setting (\aref{A_planar}). It
-assumes Newtonian gravitation (\aref{A_newtonianGravity}) and classical
-mechanics (\aref{A_nonRelativistic}), with point-mass stars (\aref{A_pointMass})
-of constant masses (\aref{A_constantMass}), in an inertial frame
-(\aref{A_inertialFrame}), and neglects non-gravitational forces
+This model is derived by applying Newton's second law (\tref{TM4}) to each star,
+with the gravitational force given by Newton's law of universal gravitation
+(\tref{TM5}). Substituting $\mathbf{F}=m\mathbf{a}$ and using the definition of
+acceleration (\tref{TM3}), we obtain second-order ODEs for the position vectors.
+The model applies to a two-body system (\aref{A_twoBody}) in a planar setting
+(\aref{A_planar}), assuming Newtonian gravitation (\aref{A_newtonianGravity})
+and classical mechanics (\aref{A_nonRelativistic}), with point-mass stars
+(\aref{A_pointMass}) of constant masses (\aref{A_constantMass}), in an inertial
+frame (\aref{A_inertialFrame}), and neglecting non-gravitational forces
 (\aref{A_isolated}). The relative position and separation are defined by
-\dref{GD:RelPosSep}.
+\tref{TM6}.
 
 \subsubsection{Input Data Constraints} \label{sec_DataConstraints}    
 
@@ -781,7 +785,11 @@ Table~\ref{TblInputVar} lists the constraints on the input variables for BSS.
 Physical constraints capture non-negotiable requirements (for example, positive
 mass). Software constraints restrict inputs to ranges that are expected to be
 numerically reasonable for the intended use of this simulator
-(Section~\ref{sec_Scope}).
+(Section~\ref{sec_Scope}). The rationale for these ranges is as follows: mass
+bounds correspond to the range of stellar masses from low-mass stars to massive
+giants; position and velocity bounds ensure the system remains within physically
+plausible scales for binary star orbits; and time bounds cover simulations from
+short dynamical tests to long-term orbital evolution.
 
 The specification parameters referenced in the software constraints are listed
 in Table~\ref{TblSpecParams}.
@@ -796,11 +804,11 @@ in Table~\ref{TblSpecParams}.
   \midrule
   $m_1$ & $m_1 > 0$ & $m_{\min} \le m_1 \le m_{\max}$ & $2.0\times 10^{30}\,\si{kg}$ & 5\% \\
   $m_2$ & $m_2 > 0$ & $m_{\min} \le m_2 \le m_{\max}$ & $1.6\times 10^{30}\,\si{kg}$ & 5\% \\
-  $\mathbf{r}_1(0)$ & $\mathbf{r}_1(0)\in\mathbb{R}^2$ & $\lVert \mathbf{r}_1(0) \rVert \le r_{\max}$ & $(+7.5\times 10^{10},0)\,\si{m}$ & 1\% \\
-  $\mathbf{r}_2(0)$ & $\mathbf{r}_2(0)\in\mathbb{R}^2$ & $\lVert \mathbf{r}_2(0) \rVert \le r_{\max}$ & $(-7.5\times 10^{10},0)\,\si{m}$ & 1\% \\
-  $\mathbf{v}_1(0)$ & $\mathbf{v}_1(0)\in\mathbb{R}^2$ & $\lVert \mathbf{v}_1(0) \rVert \le v_{\max}$ & $(0,+1.0\times 10^{4})\,\si{m\per s}$ & 5\% \\
-  $\mathbf{v}_2(0)$ & $\mathbf{v}_2(0)\in\mathbb{R}^2$ & $\lVert \mathbf{v}_2(0) \rVert \le v_{\max}$ & $(0,-1.0\times 10^{4})\,\si{m\per s}$ & 5\% \\
-  $t_{\text{final}}$ & $t_{\text{final}} > 0$ & $t_{\min} \le t_{\text{final}} \le t_{\max}$ & $3.15\times 10^{7}\,\si{s}$ & --- \\
+  $\mathbf{r}_1^0$ & --- & $\lVert \mathbf{r}_1^0 \rVert \le r_{\max}$ & $(+7.5\times 10^{10},0)\,\si{m}$ & 1\% \\
+  $\mathbf{r}_2^0$ & --- & $\lVert \mathbf{r}_2^0 \rVert \le r_{\max}$ & $(-7.5\times 10^{10},0)\,\si{m}$ & 1\% \\
+  $\mathbf{v}_1^0$ & --- & $\lVert \mathbf{v}_1^0 \rVert \le v_{\max}$ & $(0,+1.0\times 10^{4})\,\si{m\per s}$ & 5\% \\
+  $\mathbf{v}_2^0$ & --- & $\lVert \mathbf{v}_2^0 \rVert \le v_{\max}$ & $(0,-1.0\times 10^{4})\,\si{m\per s}$ & 5\% \\
+  $t_{\text{final}}$ & $t_{\text{final}} \ge 0$ & $t_{\min} \le t_{\text{final}} \le t_{\max}$ & $3.15\times 10^{7}\,\si{s}$ & --- \\
   \bottomrule
 \end{longtable*}
 \end{table}
@@ -808,22 +816,22 @@ in Table~\ref{TblSpecParams}.
 \noindent
 \begin{description}
 \item[(*)] In the center-of-mass frame used by \iref{IM:Orbit}, the initial
-positions must satisfy $m_1\mathbf{r}_1(0)+m_2\mathbf{r}_2(0)=\mathbf{0}$.
+positions must satisfy $m_1\mathbf{r}_1^0+m_2\mathbf{r}_2^0=\mathbf{0}$.
 \end{description}
 
 \begin{table}[!h]
 \caption{Specification Parameter Values} \label{TblSpecParams}
 \renewcommand{\arraystretch}{1.2}
-\noindent \begin{longtable*}{l l}
+\noindent \begin{longtable*}{l l l}
   \toprule
-  \textbf{Var} & \textbf{Value} \\
+  \textbf{Var} & \textbf{Value} & \textbf{Rationale} \\
   \midrule
-  $m_{\min}$ & $1.0\times 10^{29}\,\si{kg}$\\
-  $m_{\max}$ & $1.0\times 10^{32}\,\si{kg}$\\
-  $r_{\max}$ & $10^{13}\,\si{m}$\\
-  $v_{\max}$ & $10^6\,\si{m\per s}$\\
-  $t_{\min}$ & $10^3\,\si{s}$\\
-  $t_{\max}$ & $10^{10}\,\si{s}$\\
+  $m_{\min}$ & $1.0\times 10^{29}\,\si{kg}$ & Lower bound for low-mass stars (${\sim}0.05\,M_\odot$) \\
+  $m_{\max}$ & $1.0\times 10^{32}\,\si{kg}$ & Upper bound for massive stars (${\sim}50\,M_\odot$) \\
+  $r_{\max}$ & $10^{13}\,\si{m}$ & Covers wide binary separations (${\sim}67\,\text{AU}$) \\
+  $v_{\max}$ & $10^6\,\si{m\per s}$ & Below relativistic threshold (${\sim}0.3\%\,c$) \\
+  $t_{\min}$ & $10^3\,\si{s}$ & Short dynamical test (${\sim}17\,\text{min}$) \\
+  $t_{\max}$ & $10^{10}\,\si{s}$ & Long-term evolution (${\sim}317\,\text{yr}$) \\
   \bottomrule
 \end{longtable*}
 \end{table}
@@ -831,21 +839,30 @@ positions must satisfy $m_1\mathbf{r}_1(0)+m_2\mathbf{r}_2(0)=\mathbf{0}$.
 \subsubsection{Properties of a Correct Solution} \label{sec_CorrectSolution}
 
 \noindent
-A correct solution must exhibit with the limitations as defined in
-Table~\ref{TblOutputVar}.
+A correct solution must satisfy the following properties:
 
 \begin{table}[!h]
 \caption{Output Variables} \label{TblOutputVar}
 \renewcommand{\arraystretch}{1.2}
 \noindent \begin{longtable*}{l l}
   \toprule
-  \textbf{Var} & \textbf{Physical Constraints} \\
+  \textbf{Var} & \textbf{Description} \\
   \midrule
-  $\mathbf{r}_1(t)$ & $\mathbf{r}_1(t) \in \mathbb{R}^2$ for $0 \le t \le t_{\text{final}}$ \\
-  $\mathbf{r}_2(t)$ & $\mathbf{r}_2(t) \in \mathbb{R}^2$ for $0 \le t \le t_{\text{final}}$ \\
+  $\mathbf{r}_1(t)$ & Position of star 1 for $0 \le t \le t_{\text{final}}$ \\
+  $\mathbf{r}_2(t)$ & Position of star 2 for $0 \le t \le t_{\text{final}}$ \\
   \bottomrule
 \end{longtable*}
 \end{table}
+
+\noindent In addition, the following conservation property must hold for a correct
+solution. The total mechanical energy of the system,
+\begin{equation*}
+E = \frac{1}{2}m_1\lVert\mathbf{v}_1(t)\rVert^2
+  + \frac{1}{2}m_2\lVert\mathbf{v}_2(t)\rVert^2
+  - G\frac{m_1 m_2}{r_{12}(t)},
+\end{equation*}
+must remain constant over time (up to numerical tolerance), since the system is
+isolated and conservative (\aref{A_isolated}, \aref{A_constantMass}).
 
 \section{Requirements}
 
@@ -871,8 +888,9 @@ computation begins.
 Table~\ref{TblInputVar}.
 
 \item[R\refstepcounter{reqnum}\thereqnum \label{R_VerifyOutput}:]
-The software shall verify that the computed results satisfy the consistency
-conditions defined by the instance models in Section~\ref{sec_instance}.
+The software shall verify that the computed results satisfy the conservation of
+total mechanical energy (Section~\ref{sec_CorrectSolution}) within a specified
+numerical tolerance.
 
 \item[R\refstepcounter{reqnum}\thereqnum \label{R_Output}:]
 The software shall compute and output the system state variables specified in
@@ -892,7 +910,7 @@ Section~\ref{sec_instance}.
   \textbf{Accuracy} The accuracy of the computed solutions shall meet the level required for the
 intended scientific and educational usage domain. Confidence in the accuracy of
 the software shall be established by following the procedures outlined in the
-Verification and Validation Plan.
+\hyperref[sec_VnV]{Verification and Validation Plan}.
 
 \item[NFR\refstepcounter{nfrnum}\thenfrnum \label{NFR_Usability}:] \textbf{Usabi
   lity}
@@ -903,10 +921,11 @@ software will be discussed and evaluated following the procedure in the
 Verification and Validation Plan.
 
 \item[NFR\refstepcounter{nfrnum}\thenfrnum \label{NFR_Maintainability}:]
-  \textbf{Maintainability} The specification and models are encoded using Drasil. This should make routine
-updates (e.g., adjusting parameters or refining assumptions) manageable and
-predictable. When changes are made, their impact on the generated artifacts
-should be clear and traceable.
+  \textbf{Maintainability} Routine updates to the software (e.g., adjusting
+parameters or refining assumptions) shall be manageable and predictable. When
+changes are made, their impact on the generated artifacts should be clear and
+traceable. Maintainability will be evaluated by assessing the effort required to
+make a representative set of changes.
 
 \item[NFR\refstepcounter{nfrnum}\thenfrnum \label{NFR_Portability}:]
   \textbf{Portability} BSS should run on common operating systems, including Linux, macOS, and
@@ -914,25 +933,39 @@ Windows.
 
 \end{itemize}
 
+\label{sec_VnV}
+
 \subsection{Rationale}
 
 The scope of this document is intentionally limited to a simplified binary star
-system in order to keep the problem tractable and clearly defined. Restricting
-the system to two bodies in a two-dimensional inertial reference frame allows
-the essential physical behavior to be captured without introducing unnecessary
-complexity.
+system in order to keep the problem tractable and clearly defined. The key scope
+decisions, and the assumptions and typical values that support them, are:
 
-The modeling choices and assumptions are based on standard practices in
-introductory classical mechanics. Newtonian gravitation is used because it is
-sufficient for describing the intended class of systems and is widely understood
-by the intended readers. Additional effects such as relativistic corrections and
-external forces are excluded to maintain focus on the core problem.
+\begin{itemize}
+\item \textbf{Two-body restriction} (\aref{A_twoBody}, \aref{A_isolated}):
+  Only mutual gravitation between two stars is modeled. This excludes third-body
+  perturbations, drag, thrust, and radiation pressure, keeping the force model
+  simple.
+\item \textbf{Classical mechanics} (\aref{A_newtonianGravity},
+  \aref{A_nonRelativistic}): Newtonian gravitation and non-relativistic
+  mechanics are used because they are sufficient for the intended class of
+  systems. The velocity bound ($v_{\max}=10^6\,\si{m\per s}$, well below
+  $0.3\%\,c$) ensures relativistic effects are negligible.
+\item \textbf{Point-mass stars} (\aref{A_pointMass}, \aref{A_constantMass}):
+  Stellar size, deformation, rotation, and mass loss are neglected. The mass
+  bounds ($10^{29}$--$10^{32}\,\si{kg}$) cover the range from low-mass to
+  massive stars.
+\item \textbf{Planar, inertial frame} (\aref{A_inertialFrame},
+  \aref{A_planar}): Confining motion to a 2D plane in Cartesian coordinates
+  simplifies the equations without loss of generality for coplanar orbits.
+\item \textbf{No collisions} (\aref{A_nonzeroSeparation}): The separation
+  distance is assumed to remain positive, ensuring the gravitational force model
+  is well-defined.
+\end{itemize}
 
-Typical values and representations are chosen to support clarity, consistency,
-and ease of verification. The use of Drasil motivates explicit and structured
-definitions of assumptions and models, which improves traceability between the
-physical problem, the mathematical formulation, and the resulting software
-artifacts.
+Typical values and specification parameters (Table~\ref{TblSpecParams}) are
+chosen to support clarity, consistency, and ease of verification within these
+scope decisions.
 
 
 \section{Likely Changes}    
@@ -975,9 +1008,10 @@ the assumptions.
 \hline
 \tref{TM1}            & & & & & & & & & \\ \hline
 \tref{TM2}            & & & & & & & & & \\ \hline
-\tref{TM3}            & & & X& & & & & & X\\ \hline
-\tref{TM4}            & & & & X& & & X& & \\ \hline
-\dref{GD:RelPosSep}   & & & & & & & & X& \\ \hline
+\tref{TM3}            & & & & & & & & & \\ \hline
+\tref{TM4}            & & & & X& & & & & \\ \hline
+\tref{TM5}            & & & X& & & & & & X\\ \hline
+\tref{TM6}            & & & & & & & & X& \\ \hline
 \ddref{DD:G}          & & & & & & & & & \\ \hline
 \iref{IM:Orbit}       & X& X& X& X& X& X& X& X& X\\
 \hline
@@ -992,17 +1026,18 @@ the assumptions.
 
 \begin{table}[h!]
 \centering
-\begin{tabular}{|c|c|c|c|c|c|c|c|}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|}
 \hline
-	& \tref{TM1} & \tref{TM2} & \tref{TM3} & \tref{TM4} & \dref{GD:RelPosSep} & \ddref{DD:G} & \iref{IM:Orbit} \\
+	& \tref{TM1} & \tref{TM2} & \tref{TM3} & \tref{TM4} & \tref{TM5} & \tref{TM6} & \ddref{DD:G} & \iref{IM:Orbit} \\
 \hline
-\tref{TM1}          &  &  &  &  &  &  &  \\ \hline
-\tref{TM2}          &  &  &  &  &  &  &  \\ \hline
-\tref{TM3}          &  &  &  &  & X& X&  \\ \hline
-\tref{TM4}          &  &  & X&  &  &  &  \\ \hline
-\dref{GD:RelPosSep} &  &  &  &  &  &  &  \\ \hline
-\ddref{DD:G}        &  &  &  &  &  &  &  \\ \hline
-\iref{IM:Orbit}     & X& X& X& X& X& X&  \\ \hline
+\tref{TM1}          &  &  &  &  &  &  &  &  \\ \hline
+\tref{TM2}          &  &  &  &  &  &  &  &  \\ \hline
+\tref{TM3}          &  & X&  &  &  &  &  &  \\ \hline
+\tref{TM4}          &  &  & X&  &  &  &  &  \\ \hline
+\tref{TM5}          &  &  &  &  &  & X& X&  \\ \hline
+\tref{TM6}          &  &  &  &  &  &  &  &  \\ \hline
+\ddref{DD:G}        &  &  &  &  &  &  &  &  \\ \hline
+\iref{IM:Orbit}     & X& X& X& X& X& X& X&  \\ \hline
 \end{tabular}
 \caption{Traceability Matrix Showing the Connections Between Items of Different Sections}
 \label{Table:trace}
