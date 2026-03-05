@@ -239,6 +239,11 @@ pythontex-files-*/
 # Latexian
 TSWLatexianTemp*
 
+# Python bytecode/cache
+__pycache__/
+*.py[cod]
+*$py.class
+
 ## Editors:
 # WinEdt
 *.bak
