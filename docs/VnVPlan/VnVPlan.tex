@@ -263,10 +263,13 @@ Testing is automated using a Python-based test suite executed with \texttt{pytes
 All tests are run locally during development and re-run automatically in a
 continuous integration (CI) workflow on each change to the Drasil encoding or
 generated artifacts. To support consistent code quality, the codebase is also
-subjected to lightweight static checks (e.g., formatting and linting). The
-resulting CI reports, test outputs, and coverage summaries form the primary
-evidence that the test procedures were executed and that the implementation
-continues to satisfy the expected behaviors.
+subjected to lightweight static checks (e.g., formatting and linting) and
+manual code inspection of the Drasil encoding. In addition, issues identified
+during development are tracked in the Drasil issue tracker so that upstream
+fixes can be contributed where appropriate. The resulting CI reports, test
+outputs, and coverage summaries form the primary evidence that the test
+procedures were executed and that the implementation continues to satisfy the
+expected behaviors.
 
 \subsection{Software Validation}
 
