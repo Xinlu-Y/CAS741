@@ -406,17 +406,20 @@ following automated checks:
   units or labels where applicable, and consistent row formatting).
 
   \item \textbf{C2 (Constraint violation handling):} Provide an input set that
-  violates the center of mass consistency constraint, then verify that the
-  program reports a validation error that is specific and user visible, and
-  terminates without emitting any trajectory records.
+  violates the center of mass consistency constraint (specified in Table~2 of
+  the SRS \citep{SRS}, derived from Assumption~A7), then verify that the program
+  reports a validation error that is specific and user visible and terminates
+  immediately without entering the solver or emitting any trajectory records.
 
   \item \textbf{C3 (Symmetry and invariants):} For the equal mass symmetric
   configuration, sample $N=2000$ time points $t_k$ over
-  $[0, t_{\text{final}}]$. Accept if both invariants hold within tolerance:
+  $[0, t_{\text{final}}]$. The a~priori error bounds are
+  $\epsilon_{cm}$ for center-of-mass drift and $\epsilon_{sym}$ for symmetry
+  violation; the test accepts if
   $\max_k \lVert \mathbf{r}_{cm}(t_k)\rVert \le \epsilon_{cm}$ and
   $\max_k \lVert \mathbf{r}_1(t_k)+\mathbf{r}_2(t_k)\rVert \le \epsilon_{sym}$.
-  This check targets model consistency properties that should be solver
-  independent in exact arithmetic.
+  These invariants hold exactly in exact arithmetic; the tolerances account for
+  accumulated numerical integration error over the simulation interval.
 
   \item \textbf{C4 (Analytic circular orbit checkpoints):} Use a configuration
   that admits a closed form circular orbit solution. Evaluate the predicted
@@ -427,8 +430,10 @@ following automated checks:
   based on the analytic model rather than on empirical expectations.
 
   \item \textbf{C5 (High precision reference comparison):} Compute a reference
-  trajectory using a validated high precision solver configuration, then sample
-  $N=1000$ time points $t_k$ over $[0, t_{\text{final}}]$. Accept if
+  trajectory using the proof-of-concept (PoC) implementation with SciPy's
+  DOP853 solver at tight tolerances (\texttt{rtol}$\,=10^{-12}$,
+  \texttt{atol}$\,=10^{-14}$), then sample $N=1000$ time points $t_k$ over
+  $[0, t_{\text{final}}]$. Accept if
   $\max_k \lVert \mathbf{r}_1(t_k)-\mathbf{r}_{1,\text{ref}}(t_k)\rVert \le \epsilon_r^{(5)}$
   and
   $\max_k \lVert \mathbf{r}_2(t_k)-\mathbf{r}_{2,\text{ref}}(t_k)\rVert \le \epsilon_r^{(5)}$.
@@ -456,6 +461,10 @@ The default values used in this plan are
 $\epsilon_{cm}=\epsilon_{sym}=1.0\mathrm{E}6$ m,
 $\epsilon_r^{(4)}=1.0\mathrm{E}4$ m, and
 $\epsilon_r^{(5)}=1.0\mathrm{E}6$ m.
+Note that numerical integration error can accumulate over long simulation
+intervals. The test final times are chosen to be short enough (at most a few
+orbital periods) so that the solver remains stable; the SRS bound
+$t_{\text{final}} \le 10^{10}$ s limits the maximum integration span.
 
 \textbf{Role of the test set.}
 Together, T1IVP and T2IVP establish correct input handling and constraint
