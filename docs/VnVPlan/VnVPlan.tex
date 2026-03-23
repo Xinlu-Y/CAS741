@@ -460,8 +460,9 @@ oracle is the closed form circular orbit model, because it provides
 implementation independent expected values. Any solver based cross check is
 secondary and is used only to guard against arithmetic or transcription errors
 in the analytic parameter calculation. For T5IVP (C5), the primary oracle is a
-validated high precision numerical reference, because the general case does not
-admit a practical closed form solution.
+high-precision numerical reference produced by SciPy's DOP853 solver at
+\texttt{rtol}$\,=10^{-12}$ and \texttt{atol}$\,=10^{-14}$ (see~C5 above),
+because the general case does not admit a practical closed-form solution.
 
 \textbf{Sampling strategy and tolerances.}
 Automated comparisons are performed on sampled time points $t_k$ to avoid
