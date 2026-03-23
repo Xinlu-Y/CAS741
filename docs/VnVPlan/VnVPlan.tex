@@ -570,10 +570,27 @@ section will be completed after Drasil starts generating code.
 In addition to the symbolic parameters defined in the SRS \citep{SRS}, this
 plan uses the following tolerances for automated acceptance checks:
 \begin{itemize}
-  \item $\epsilon_{cm}=1.0\mathrm{E}6$ m (center-of-mass tolerance),
-  \item $\epsilon_{sym}=1.0\mathrm{E}6$ m (symmetry tolerance),
-  \item $\epsilon_r^{(4)}=1.0\mathrm{E}4$ m (analytic checkpoint tolerance for T4IVP),
-  \item $\epsilon_r^{(5)}=1.0\mathrm{E}6$ m (reference-solver comparison tolerance for T5IVP).
+  \item $\epsilon_{cm}=1.0\mathrm{E}6$ m (center-of-mass tolerance).
+  The COM position is exactly zero in exact arithmetic; over a simulation span
+  of $\sim10^{7}$~s at orbital separations of $10^{10}$--$10^{11}$~m, a drift
+  of $10^{6}$~m represents $\sim10^{-5}$ relative error, consistent with
+  DOP853 at \texttt{rtol}$\,=10^{-10}$.
+
+  \item $\epsilon_{sym}=1.0\mathrm{E}6$ m (symmetry tolerance).
+  For the equal-mass case $\mathbf{r}_1+\mathbf{r}_2=\mathbf{0}$ holds
+  analytically; the same relative-error reasoning as $\epsilon_{cm}$ applies.
+
+  \item $\epsilon_r^{(4)}=1.0\mathrm{E}4$ m (analytic checkpoint tolerance for
+  T4IVP).
+  T4IVP uses a circular orbit with $a=10^{10}$~m over one period
+  ($\sim1.5\times10^{6}$~s). The short, periodic trajectory limits error
+  growth, so a tighter bound of $10^{-6}$ relative to $a$ is feasible.
+
+  \item $\epsilon_r^{(5)}=1.0\mathrm{E}6$ m (reference-solver comparison
+  tolerance for T5IVP).
+  T5IVP compares the SUT against a reference at \texttt{rtol}$\,=10^{-12}$.
+  The looser SUT tolerances and non-circular trajectory lead to less
+  predictable error growth, so the wider $10^{6}$~m bound is used.
 \end{itemize}
 
 \subsection{Usability Survey Questions}
