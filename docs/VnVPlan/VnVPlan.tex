@@ -312,10 +312,15 @@ inspection.
 
 \subsubsection{IVP Solver and Model Consistency}
 All IVP tests are run with a trivial initial state (program not running) and
-inputs that satisfy the constraints in Table 2 of \citep{SRS}. The expected
-outputs are verified against known two-body properties (e.g., center of mass
-behavior) or reference solutions derived from the instance models. When
-applicable, a trusted solver or analytic case is used as a control.
+inputs that satisfy the constraints in Table 2 of \citep{SRS}. In particular,
+the SRS restricts masses to $[10^{29}, 10^{32}]$ kg, positions to
+$\lVert\mathbf{r}\rVert \le 10^{13}$ m, velocities to
+$\lVert\mathbf{v}\rVert \le 10^{6}$ m/s, and the final time to
+$[10^{3}, 10^{10}]$ s; any input outside these bounds is rejected before the
+solver runs. The expected outputs are verified against known two-body properties
+(e.g., center of mass behavior) or reference solutions derived from the instance
+models. When applicable, a trusted solver or analytic case is used as a
+control.
 
 \begin{landscape}
 \begin{table}[p]
