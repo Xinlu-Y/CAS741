@@ -273,15 +273,16 @@ expected behaviors.
 
 \subsection{Software Validation}
 
-Validation assesses whether BSS produces physically meaningful trajectories for
-its intended educational scope. Evidence is gathered by checking generated
-results against well-known two-body properties (such as center-of-mass behavior
-and symmetry in equal-mass cases) and against reference solutions for selected
-scenarios, including closed-form circular-orbit checkpoints and high-precision
-numerical runs. In addition, feedback from the course instructor and peer
-reviewers is used to confirm that the chosen assumptions, inputs/outputs, and
-reported results align with the goals of the SRS and the expected use in a
-learning context.
+Validation asks whether we are building the \emph{right} system. For BSS, true
+validation would require comparison with observational or experimental data for
+real binary star systems, which is out of scope for this project. Instead,
+validation evidence is limited to expert judgement: feedback from the course
+instructor and peer reviewers is used to confirm that the chosen assumptions,
+inputs/outputs, and reported results align with the goals of the SRS and the
+expected use in a learning context. Note that comparisons against reference
+solutions and known two-body properties (e.g., center-of-mass conservation,
+symmetry) are verification activities and are covered in
+Section~\ref{SystemTests}.
 
 \newpage
 \section{System Tests}
