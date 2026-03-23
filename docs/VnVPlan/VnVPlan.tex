@@ -310,15 +310,28 @@ the inputs are re-iterated by the program before any calculation. This can be
 checked automatically by inspecting the output headers or manually by visual
 inspection.
 
-\subsubsection{IVP Solver and Model Consistency}
-All IVP tests are run with a trivial initial state (program not running) and
-inputs that satisfy the constraints in Table 2 of \citep{SRS}. In particular,
-the SRS restricts masses to $[10^{29}, 10^{32}]$ kg, positions to
-$\lVert\mathbf{r}\rVert \le 10^{13}$ m, velocities to
-$\lVert\mathbf{v}\rVert \le 10^{6}$ m/s, and the final time to
-$[10^{3}, 10^{10}]$ s; any input outside these bounds is rejected before the
+\subsubsection{Input Handling, Constraint Enforcement, and IVP Solver
+Consistency}
+The functional test cases in Table~\ref{tab:func-tests} are grouped into two
+categories:
+\begin{itemize}
+  \item \textbf{Input handling and constraint enforcement (T1IVP, T2IVP):}
+  These tests verify that the program correctly echoes inputs and rejects
+  invalid configurations at the system boundary, \emph{before} the solver is
+  invoked.
+  \item \textbf{IVP solver and model consistency (T3IVP--T5IVP):} These tests
+  exercise the solver and check that the computed trajectories satisfy known
+  physical invariants or match reference solutions.
+\end{itemize}
+
+All tests use inputs that satisfy the constraints in Table~2 of \citep{SRS}
+(except T2IVP, which deliberately violates the center-of-mass constraint). In
+particular, the SRS restricts masses to $[10^{29}, 10^{32}]$~kg, positions to
+$\lVert\mathbf{r}\rVert \le 10^{13}$~m, velocities to
+$\lVert\mathbf{v}\rVert \le 10^{6}$~m/s, and the final time to
+$[10^{3}, 10^{10}]$~s; any input outside these bounds is rejected before the
 solver runs. The expected outputs are verified against known two-body properties
-(e.g., center of mass behavior) or reference solutions derived from the instance
+(e.g., center-of-mass behavior) or reference solutions derived from the instance
 models. When applicable, a trusted solver or analytic case is used as a
 control.
 
@@ -380,7 +393,7 @@ $[0,t_{\text{final}}]$. &
 C5 \\
 \hline
 \end{tabularx}
-\caption{Automatic Functional Tests for the IVP Solver (T1IVP--T5IVP)}
+\caption{Automatic Functional Tests: Input Handling and IVP Solver (T1IVP--T5IVP)}
 \label{tab:func-tests}
 \end{table}
 \end{landscape}
