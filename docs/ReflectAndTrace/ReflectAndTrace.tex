@@ -1,11 +1,13 @@
 \documentclass{article}
 
+\usepackage[margin=1in]{geometry}
 \usepackage{tabularx}
 \usepackage{booktabs}
+\usepackage[normalem]{ulem}
 
-\title{Reflection and Traceability Report on \progname}
+\title{Reflection and Traceability Report on BSS}
 
-\author{\authname}
+\author{Xinlu Yan}
 
 \date{}
 
@@ -16,128 +18,168 @@
 
 \maketitle
 
-\plt{Reflection is an important component of getting the full benefits from a
-learning experience.  Besides the intrinsic benefits of reflection, this
-document will be used to help the TAs grade how well your team responded to
-feedback.  Therefore, traceability between Revision 0 and Revision 1 is and
-important part of the reflection exercise.  In addition, several CEAB (Canadian
-Engineering Accreditation Board) Learning Outcomes (LOs) will be assessed based
-on your reflections.}
-
 \section{Changes in Response to Feedback}
 
-\plt{Summarize the changes made over the course of the project in response to
-feedback from TAs, the instructor, teammates, other teams, the project
-supervisor (if present), and from user testers.}
+All feedback is recorded on the
+\href{https://github.com/Xinlu-Y/CAS741/issues}{GitHub issue tracker}; each
+item is its own issue, and the response is either a comment, a linked
+commit, or a tracking issue listing the resolving commits. Only
+representative items are highlighted below.
 
-\plt{For those teams with an external supervisor, please highlight how the feedback 
-from the supervisor shaped your project.  In particular, you should highlight the 
-supervisor's response to your Rev 0 demonstration to them.}
+\subsection{SRS \sout{and Hazard Analysis}}
 
-\plt{Version control can make the summary relatively easy, if you used issues
-and meaningful commits.  If you feedback is in an issue, and you responded in
-the issue tracker, you can point to the issue as part of explaining your
-changes.  If addressing the issue required changes to code or documentation, you
-can point to the specific commit that made the changes.  Although the links are
-helpful for the details, you should include a label for each item of feedback so
-that the reader has an idea of what each item is about without the need to click
-on everything to find out.}
+The overall structure of my SRS stayed mostly the same after feedback.
+That was partly because I had useful advice early on from Dr.~Smith and
+from the course material, so the document began with a reasonable
+structure.
 
-\plt{If you were not organized with your commits, traceability between feedback
-and commits will not be feasible to capture after the fact.  You will instead
-need to spend time writing down a summary of the changes made in response to
-each item of feedback.}
+Most of the feedback on the SRS was relatively minor. It mainly pointed
+out mistakes, places where I had misunderstood the purpose of a section,
+and places where the theory or its explanation needed to be clearer. The
+largest changes were in the theoretical models, the instance model, and
+the input constraints, which became much more explicit by the end.
 
-\plt{You should address EVERY item of feedback.  A table or itemized list is
-recommended.  You should record every item of feedback, along with the source of
-that feedback and the change you made in response to that feedback.  The
-response can be a change to your documentation, code, or development process.
-The response can also be the reason why no changes were made in response to the
-feedback.  To make this information manageable, you will record the feedback and
-response separately for each deliverable in the sections that follow.}
+The presentation feedback was especially helpful early in the term,
+while I was still figuring out how to write the SRS. Getting that advice
+early made it easier to continue the document and probably reduced the
+number of larger issues in later rounds of feedback.
 
-\plt{If the feedback is general or incomplete, the TA (or instructor) will not
-be able to grade your response to feedback.  In that case your grade on this
-document, and likely the Revision 1 versions of the other documents will be
-low.} 
-
-\subsection{SRS and Hazard Analysis}
+I did not receive meaningful feedback on the Hazard Analysis, which is
+why it has been struck from the subsection title. Since BSS is only a
+numerical simulation and does not interact with physical hardware, there
+was not much hazard-related discussion.
 
 \subsection{Design and Design Documentation}
 
-\subsection{VnV Plan and Report}
+There was no separate software design document for this project. Most
+design-related feedback was absorbed into the SRS and later revisions to
+the modelling assumptions, instance model, and validation strategy.
 
-\section{Extras}
+\subsection{VnV Plan \sout{and Report}}
 
-\plt{Summarize the extras that were tackled by this project.  Extras
-can include usability testing, code walkthroughs, user documentation, formal
-proof, GenderMag personas, Design Thinking, etc.  Extras should have already
-been approved by the course instructor as included in your problem statement.}
+The VnV~Plan received peer review and comments from Dr.~Smith. Most of the
+feedback was relatively minor, including wording changes, numbering
+fixes, cleanup, and small corrections throughout the document. The main
+substantive comments focused on making the testing story clearer:
+distinguishing validation from verification more carefully, placing
+tests in the right categories, and justifying numerical tolerances and
+oracle choices more explicitly. I revised the plan accordingly to make
+those distinctions and justifications clearer.
+
+I did not produce a VnV~Report for this project, which is why
+\textit{Report} has been struck from the subsection title.
 
 \section{Design Iteration (LO11 (PrototypeIterate))}
 
-\plt{Explain how you arrived at your final design and implementation.  How did
-the design evolve from the first version to the final version?} 
+The design changed mostly through review, Drasil encoding, and VnV
+planning, not through building a large prototype. After the first SRS
+draft, I ended up restructuring the theoretical models, rewriting the
+instance model into a cleaner ODE form, and making several constraints
+more explicit.
 
-\plt{Don't just say what you changed, say why you changed it.  The needs of the
-client should be part of the explanation.  For example, if you made changes in
-response to usability testing, explain what the testing found and what changes
-it led to.}
+The main change was that some assumptions stopped being just background
+statements and became real design constraints. The center-of-mass frame
+needed zero-total-momentum initial conditions to be checkable, and the
+nonzero-separation assumption had to be treated as a real precondition
+for the force model. Drasil also forced some changes in how I wrote the
+design, since some mathematical expressions did not fit cleanly into the
+available representations. The VnV plan pushed this a bit further by
+making me separate input handling, solver behaviour, verification, and
+validation more clearly.
 
 \section{Design Decisions (LO12)}
 
-\plt{Reflect and justify your design decisions.  How did limitations,
- assumptions, and constraints influence your decisions?  Discuss each of these
- separately.}
+The biggest design decision was to keep the problem narrow. I focused on
+a two-body binary star system in 2-D under Newtonian gravity, instead of
+trying to support a more general astrophysical setting. That meant
+leaving out relativity, third-body effects, collisions, and similar
+complications so the project would stay manageable.
+
+Another decision was to turn some modelling assumptions into explicit
+constraints. The center-of-mass frame, planar motion, and nonzero
+separation all affect the inputs, the equations, and what counts as a
+valid result, so I did not want them to remain as vague background
+assumptions.
+
+I also chose to keep the SRS focused on the problem and the model,
+rather than forcing it too early into an implementation-oriented form.
+At the same time, I still had to work within Drasil's current limits,
+especially for vectors, function representations, and differential
+equation expressions. In practice, that meant some formulations had to
+be rewritten into forms that Drasil could handle better.
+
+Finally, I treated the IVP solver as external to the scientific model.
+The software is responsible for checking inputs and setting up the
+problem correctly, while the solver is responsible for attempting to
+solve the ODE system.
 
 \section{Economic Considerations (LO23)}
 
-\plt{Is there a market for your product? What would be involved in marketing your 
-product? What is your estimate of the cost to produce a version that you could 
-sell?  What would you charge for your product?  How many units would you have to 
-sell to make money? If your product isn't something that would be sold, like an 
-open source project, how would you go about attracting users?  How many potential 
-users currently exist?}
+BSS is not a commercial product. Its target audience is undergraduate
+students taking a first course in classical mechanics, scientific
+computing, or numerical methods, where a small, transparent, well-documented
+two-body simulator is more useful as a teaching aid than a production
+astrophysics package would be. That market is already well served by
+free open-source tools, so BSS would not attract paying users on its
+own. What matters economically is its role as a Drasil case study:
+producing a generated scientific computing program from a documented
+SRS for a non-trivial physics problem strengthens the argument that
+Drasil's document-first approach can scale. To attract users to BSS
+specifically, the most promising route is releasing it on GitHub with
+the User Guide as the entry point and a few worked example inputs
+(circular, eccentric, unequal-mass), so any undergraduate physics or
+computational science course can adopt it cheaply.
 
 \section{Reflection on Project Management (LO24)}
 
-\plt{This question focuses on processes and tools used for project management.}
-
 \subsection{How Does Your Project Management Compare to Your Development Plan}
 
-\plt{Did you follow your Development plan, with respect to the team meeting plan, 
-team communication plan, team member roles and workflow plan.  Did you use the 
-technology you planned on using?}
+
+As the sole member of this project, the team-oriented elements of the Development Plan,
+such as the meeting plan, communication plan, and role assignments, were not directly
+applicable. Issue tracking, however, remained highly relevant: I used GitHub issues
+throughout the project, turning each piece of feedback into an issue that was then
+resolved either by a referenced commit or by linking it to a tracking issue.
+
+The technology stack ultimately matched the original plan, consisting of Python, LaTeX,
+and Drasil for generating the SRS. Coordination with Zhuo Zhang and Dr. Smith was also
+smooth. The course community was active and collaborative on GitHub, which made online
+discussions efficient and productive.
 
 \subsection{What Went Well?}
 
-\plt{What went well for your project management in terms of processes and 
-technology?}
+What went well for me in this project was my ability to move beyond just learning the toolchain and
+begin understanding the deeper ideas behind Drasil. Once I became comfortable with the technologies
+and workflow, I was able to focus much more on how the system organizes knowledge through chunk
+types and how that structure supports a stronger SRS. Building the BSS example helped me develop
+that understanding in a concrete way, since it required me to think carefully about theory models,
+derivations, assumptions, and consistency across the document. I was especially happy that this
+understanding transferred into my code generation work as well. Rather than treating the example and
+the generator as separate tasks, I was able to apply the same knowledge-first perspective to fix
+several code generation issues, including problems with multi-value outputs and ODE solution
+handling across languages. That transfer of knowledge was one of the most successful parts of the
+project for me, because it showed real growth in both my understanding of Drasil and my ability to
+contribute to it in a meaningful way.
 
 \subsection{What Went Wrong?}
 
-\plt{What went wrong in terms of processes and technology?}
+Although the project did not encounter any major breakdowns in process or tooling, a few challenges did affect progress. The main difficulty was the Drasil encoding. The most significant issue was the
+gap between the level of precision I wanted in the SRS and mathematical development and the form that Drasil currently handles most naturally for code
+generation. In particular, areas such as function definitions, vectors, and manually written code snippets required extra effort and did not always fit smoothly into the existing workflow. Some constructs I wanted
+(a vector gravitational law with an explicit unit vector, traceability
+links to non-UID property statements) had no clean Drasil counterpart
+and I had to work around them. The PDF output of the generated SRS
+also had table-overflow issues with the traceability matrices.
 
 \subsection{What Would you Do Differently Next Time?}
 
-\plt{What will you do differently for your next project?}
+  Next time, I would keep the same document-driven development approach, but I would structure the project around the known limitations of Drasil much earlier.
+  In particular, I would narrow the problem scope sooner and make earlier decisions about how mathematical objects such as functions and differential equation
+  solutions should be represented within Drasil. Doing so would reduce rework and make the transition from SRS development to implementation smoother.
+  One especially valuable improvement would be a guided tutorial for new Drasil authors, helping them set up a local development
+  environment and build a small working example that can serve as a template for their own projects.
 
-\section{Ethics and Equity (LO18)}
-
-\plt{Describe how your team applied the principle of equity and universal design
-to ensure equitable treatment of all stakeholders.}
-
-\section{Reflection on Capstone}
-
-\plt{This question focuses on what you learned during the course of the capstone project.}
-
-\subsection{Which Courses Were Relevant}
-
-\plt{Which of the courses you have taken were relevant for the capstone project?}
-
-\subsection{Knowledge/Skills Outside of Courses}
-
-\plt{What skills/knowledge did you need to acquire for your capstone project
-that was outside of the courses you took?}
+  More broadly, this project convinced me of the value of a principled, document-driven approach to software development. I would use this approach again in
+  future work.
 
 \end{document}
