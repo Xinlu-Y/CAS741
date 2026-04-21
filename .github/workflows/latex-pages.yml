@@ -3,10 +3,14 @@ name: Build LaTeX and Deploy PDFs
 on:
   push:
     branches: main
-    paths: [docs/**]
+    paths:
+      - docs/**
+      - .github/workflows/latex-pages.yml
   pull_request:
     branches: main
-    paths: [docs/**]
+    paths:
+      - docs/**
+      - .github/workflows/latex-pages.yml
   workflow_dispatch:
 
 permissions:
@@ -88,10 +92,14 @@ jobs:
 
           # Recreate public directory
           rm -rf public
-          mkdir -p public          
+          mkdir -p public
           
-          # Copy PDFs preserving structure
-          rsync -av build-pdf/ public/
+          # Copy all PDFs from docs/, including ones not rebuilt in this run
+          find docs -name "*.pdf" | while read -r pdf; do
+            rel="${pdf#docs/}"
+            mkdir -p "public/$(dirname "$rel")"
+            cp "$pdf" "public/$rel"
+          done
           
           # Generate PDF list (paths relative to site root)
           PDF_LIST=$(find public -name "*.pdf" | sort | sed 's|^public/||' | awk -F/ '
