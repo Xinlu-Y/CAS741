@@ -26,34 +26,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Restore PDF cache
-        uses: actions/cache@v4
-        with:
-          path: build-pdf
-          key: pdf-cache-${{ github.run_id }}
-          restore-keys: |
-            pdf-cache-
-      - name: Get changed LaTeX files
-        id: latex-files
-        run: |
-          BASE=${{ github.event.before }}
-          [ -z "$BASE" ] && BASE=HEAD^
-
-          CHANGED_FILES=$(git diff --name-only "$BASE" "${{ github.sha }}" -- ':(glob)docs/**/*.tex' | xargs)
-
-          echo "Changed files: $CHANGED_FILES"
-          echo "CHANGED_FILES=$CHANGED_FILES" >> $GITHUB_ENV
-
-          CHANGED_FILENAMES=$(for file in $CHANGED_FILES; do basename "$file"; done | xargs)
-          echo "CHANGED_FILENAMES=$CHANGED_FILENAMES" >> $GITHUB_ENV
-
-          FILE_COUNT=$(echo "$CHANGED_FILENAMES" | wc -w)
-          if [ "$FILE_COUNT" -gt 1 ]; then
-            PLURAL_S='s'
-          else
-            PLURAL_S=''
-          fi
-          echo "PLURAL_S=$PLURAL_S" >> $GITHUB_ENV
       - name: Install TeX Live
         run: |
           sudo apt-get update
@@ -61,27 +33,18 @@ jobs:
           sudo apt-get install -y --fix-missing texlive-latex-extra texlive-science texlive-fonts-extra #texlive-xetex texlive-luatex texlive-bibtex-extra 
       - name: Compile LaTeX
         run: |
-          PDF_CACHE_DIR="$GITHUB_WORKSPACE/build-pdf"
-          mkdir -p "$PDF_CACHE_DIR"
+          MAIN_TEX_FILES="
+          docs/ProblemStatementAndGoals/ProblemStatement.tex
+          docs/SRS/SRS.tex
+          docs/VnVPlan/VnVPlan.tex
+          docs/VnVReport/VnVReport.tex
+          docs/ReflectAndTrace/ReflectAndTrace.tex
+          "
 
-          echo "CHANGED_FILES seen by compile step: $CHANGED_FILES"
-
-          # Bootstrap: full build if cache is empty
-          if [ -z "${CHANGED_FILES}" ] && [ -z "$(ls -A "$PDF_CACHE_DIR" 2>/dev/null)" ]; then
-            echo "No cached PDFs found; building all documents"
-            CHANGED_FILES=$(find docs -name "*.tex")
-          fi
-
-          for file in $CHANGED_FILES; do
-            # Build using existing Makefile rules
+          for file in $MAIN_TEX_FILES; do
+            test -f "$file"
             make -B "${file%.tex}.pdf"
-              
-            # Copy result into build-pdf, preserving structure
-            rel=$(dirname "$file" | cut -d'/' -f2-)
-            mkdir -p "$PDF_CACHE_DIR/$rel"
-            cp "${file%.tex}.pdf" "$PDF_CACHE_DIR/$rel/"
           done
-        #continue-on-error: true # Job continues even if this step fails
       - name: Prepare site
         run: |
           set -euo pipefail
