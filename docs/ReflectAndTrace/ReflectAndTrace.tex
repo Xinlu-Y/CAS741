@@ -55,7 +55,7 @@ There was no separate software design document for this project. Most
 design-related feedback was absorbed into the SRS and later revisions to
 the modelling assumptions, instance model, and validation strategy.
 
-\subsection{VnV Plan \sout{and Report}}
+\subsection{VnV Plan and Report}
 
 The VnV~Plan received peer review and comments from Dr.~Smith. Most of the
 feedback was relatively minor, including wording changes, numbering
@@ -66,8 +66,8 @@ tests in the right categories, and justifying numerical tolerances and
 oracle choices more explicitly. I revised the plan accordingly to make
 those distinctions and justifications clearer.
 
-I did not produce a VnV~Report for this project, which is why
-\textit{Report} has been struck from the subsection title.
+The VnV~Report was written after executing all planned test cases. All
+five functional tests passed.
 
 \section{Design Iteration (LO11 (PrototypeIterate))}
 
@@ -163,23 +163,51 @@ contribute to it in a meaningful way.
 
 \subsection{What Went Wrong?}
 
-Although the project did not encounter any major breakdowns in process or tooling, a few challenges did affect progress. The main difficulty was the Drasil encoding. The most significant issue was the
-gap between the level of precision I wanted in the SRS and mathematical development and the form that Drasil currently handles most naturally for code
-generation. In particular, areas such as function definitions, vectors, and manually written code snippets required extra effort and did not always fit smoothly into the existing workflow. Some constructs I wanted
-(a vector gravitational law with an explicit unit vector, traceability
-links to non-UID property statements) had no clean Drasil counterpart
-and I had to work around them. The PDF output of the generated SRS
-also had table-overflow issues with the traceability matrices.
+There were no major breakdowns, but three challenges affected progress.
+
+First, Drasil has a steep learning curve. The framework has many
+interconnected abstractions (chunks, recipes, renderers) and limited
+beginner-oriented documentation, so the early weeks were mostly spent
+reading existing examples and experimenting. For anyone new to Drasil,
+I would suggest starting by modifying a small existing example rather
+than building from scratch, and focusing on the chunk type hierarchy
+before attempting code generation.
+
+Second, there was a gap between the mathematical precision I wanted in
+the SRS and what Drasil currently supports. Areas such as function
+definitions, vectors, and differential equation representations
+required extra effort and workarounds to fit into the existing
+workflow.
+
+Third, VnV testing uncovered bugs in Drasil's code-generation
+pipeline. Fixing each one required tracing through the Haskell
+codebase to understand how knowledge chunks become target-language
+constructs. This was valuable learning, but it took more time than
+planned and left less time for other deliverables.
 
 \subsection{What Would you Do Differently Next Time?}
 
-  Next time, I would keep the same document-driven development approach, but I would structure the project around the known limitations of Drasil much earlier.
-  In particular, I would narrow the problem scope sooner and make earlier decisions about how mathematical objects such as functions and differential equation
-  solutions should be represented within Drasil. Doing so would reduce rework and make the transition from SRS development to implementation smoother.
-  One especially valuable improvement would be a guided tutorial for new Drasil authors, helping them set up a local development
-  environment and build a small working example that can serve as a template for their own projects.
+  Next time, I would keep the same document-driven development approach,
+  but I would structure the project around the known limitations of Drasil
+  much earlier. In particular, I would narrow the problem scope sooner and
+  make earlier decisions about how mathematical objects such as functions
+  and differential equation solutions should be represented within Drasil.
+  Doing so would reduce rework and make the transition from SRS
+  development to implementation smoother.
 
-  More broadly, this project convinced me of the value of a principled, document-driven approach to software development. I would use this approach again in
-  future work.
+  I would also budget more time for framework-level debugging. When
+  working with a code-generation framework, bugs can appear in the
+  generator itself, not just in your own code. In this project, some
+  Drasil codegen bugs were discovered during testing, and fixing them
+  took much longer than expected. Next time I would plan for this
+  explicitly rather than assuming generated code works out of the box.
+
+  Finally, based on my experience, I wrote a short getting-started guide
+  for future Drasil authors. I hope it can reduce the initial learning curve for the next
+  person working on a Drasil case study.
+
+  More broadly, this project convinced me of the value of a principled,
+  document-driven approach to software development. I would use this
+  approach again in future work.
 
 \end{document}
